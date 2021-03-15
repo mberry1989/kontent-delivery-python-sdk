@@ -4,7 +4,6 @@ class DeliveryOptionsBuilder():
 
     def build_client_options(self, options):
         for key, value in options.items():
-            print(options)
             if "preview" in value:
                 self.preview = value["preview"]
                 try:

@@ -1,17 +1,18 @@
 import config
 from delivery.client import DeliveryClient
 from delivery.builders.filter_builder import Filter
+from delivery.content_item import ContentItem
 
 ## MANUAL TESTS
 client = DeliveryClient(config.project_id, options=config.delivery_options)
 
-items = client.get_content_items(
+r = client.get_content_items(
     Filter("system.type", "[eq]", "coffee"),
     Filter("elements.price", "[range]", "10.5,50"),
     Filter("","depth", 6)
 )
 
 # RESULTS
-if items:
-    for item in items:
-        print(item.name)
+for item in r.items:
+    print(item.name)
+print(r.api_response.url)

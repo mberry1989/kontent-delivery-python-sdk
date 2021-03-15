@@ -1,8 +1,8 @@
+from delivery.builders.listing_builder import ListingBuilder
 from delivery.builders.filter_builder import Filter, FilterBuilder
 from delivery.builders.options_builder import DeliveryOptionsBuilder
 from delivery.builders.url_builder import UrlBuilder
 from delivery.request_manager import RequestManager
-from delivery.content_item import ContentItem
 
 
 class DeliveryClient:
@@ -20,11 +20,11 @@ class DeliveryClient:
         else:
             url = UrlBuilder().build_url(self, endpoint)
         response = RequestManager().get_request(self, url)
-        if response.status_code == 200:
-            response = response.json()
-            item_listing = [ContentItem(item["system"], item["elements"]) for item in response["items"]]
-
-            return item_listing
+        if response.ok:
+            content_item_listing = ListingBuilder().build_content_item_listing(response)     
+            return content_item_listing
+        
+        return response.status_code
         
 
     def get_content_item(self):

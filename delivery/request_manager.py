@@ -10,6 +10,8 @@ class RequestManager:
             timeout_option = (2,5)
         
         r = requests.get(url, timeout=timeout_option)
+        print("REAL REQUEST MADE TO API.")
+
         try:   
             r.raise_for_status()
         except Timeout as e:

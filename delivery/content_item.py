@@ -1,5 +1,8 @@
-class ContentItem():
-    def __init__(self, system, elements):
+from requests.models import Response
+
+
+class ContentItem:
+    def __init__(self, system:dict, elements:dict):
         self.id = system["id"]
         self.name = system["name"]
         self.codename = system["codename"]
@@ -9,3 +12,16 @@ class ContentItem():
         self.collection = system["collection"]
         self.workflow_step = system["workflow_step"]
         self.elements = elements
+
+class ContentItemListing:
+    def __init__(self, content_items:list, pagination:dict,
+                    modular_content:dict, api_response:Response):
+        self.items = content_items
+        self.pagination = pagination
+        self.skip = pagination["skip"]
+        self.limit = pagination["limit"]
+        self.count = pagination["count"]
+        self.next_page = pagination["next_page"]
+        self.modular_content = modular_content
+        self.api_response = api_response
+

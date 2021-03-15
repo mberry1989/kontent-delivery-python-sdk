@@ -18,14 +18,16 @@ class FilterBuilder:
         query_string = []
 
         for filter in self.filters:
-            position = self.filters.index(filter)
-            if position == 0:
-                separator = "?"
+            if isinstance(filter, Filter):
+                position = self.filters.index(filter)
+                if position == 0:
+                    separator = "?"
+                else:
+                    separator = "&"            
+                operation = f"{filter.operation}="
+                url_segment = f"{separator}{filter.api_property}{operation}{filter.value}"
             else:
-                separator = "&"            
-            operation = f"{filter.operation}="
-            url_segment = f"{separator}{filter.api_property}{operation}{filter.value}"
-            
+                raise TypeError("Filters must be of type 'Filter'")
             query_string.append(url_segment)
 
         self._return_url = "".join(query_string)
