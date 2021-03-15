@@ -1,7 +1,6 @@
 import config
 from delivery.client import DeliveryClient
 from delivery.builders.filter_builder import Filter
-from delivery.content_item import ContentItem
 
 ## MANUAL TESTS
 client = DeliveryClient(config.project_id, options=config.delivery_options)
