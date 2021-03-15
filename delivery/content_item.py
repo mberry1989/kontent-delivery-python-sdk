@@ -2,7 +2,7 @@ from requests.models import Response
 
 
 class ContentItem:
-    def __init__(self, system:dict, elements:dict):
+    def __init__(self, system:dict, elements:dict, api_response:Response = None):
         self.id = system["id"]
         self.name = system["name"]
         self.codename = system["codename"]
@@ -12,6 +12,7 @@ class ContentItem:
         self.collection = system["collection"]
         self.workflow_step = system["workflow_step"]
         self.elements = elements
+        self.api_response = api_response
 
 class ContentItemListing:
     def __init__(self, content_items:list, pagination:dict,

@@ -1,4 +1,5 @@
-from delivery.builders.listing_builder import ListingBuilder
+from delivery.content_item import ContentItem
+from delivery.builders.content_builder import ContentBuilder
 from delivery.builders.filter_builder import Filter, FilterBuilder
 from delivery.builders.options_builder import DeliveryOptionsBuilder
 from delivery.builders.url_builder import UrlBuilder
@@ -21,14 +22,19 @@ class DeliveryClient:
             url = UrlBuilder().build_url(self, endpoint)
         response = RequestManager().get_request(self, url)
         if response.ok:
-            content_item_listing = ListingBuilder().build_content_item_listing(response)     
+            content_item_listing = ContentBuilder(response).build_content_item_listing()     
             return content_item_listing
         
         return response.status_code
         
+    def get_content_item(self, codename:str):
+        endpoint = f"/items/{codename}"
+        url = UrlBuilder().build_url(self, endpoint)
+        response = RequestManager().get_request(self, url)
+        if response.ok:
+            content_item = ContentBuilder(response).build_content_item()
+            return content_item
 
-    def get_content_item(self):
-        pass
     def get_content_types(self):
         pass
     def get_content_type(self):
