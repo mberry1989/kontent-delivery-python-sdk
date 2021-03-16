@@ -81,3 +81,4 @@ def test_get_items_with_invalid_filters(delivery_client, mock_items_with_filters
 def test_get_item(delivery_client, mock_item_response):
     r = delivery_client.get_content_item("on_roasts")
     assert r.codename == "on_roasts"
+    assert r.get_linked_items("related_articles")[0].codename == "coffee_processing_techniques"

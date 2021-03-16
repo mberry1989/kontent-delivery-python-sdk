@@ -1,4 +1,3 @@
-from delivery.content_item import ContentItem
 from delivery.builders.content_builder import ContentBuilder
 from delivery.builders.filter_builder import Filter, FilterBuilder
 from delivery.builders.options_builder import DeliveryOptionsBuilder
@@ -34,6 +33,9 @@ class DeliveryClient:
         if response.ok:
             content_item = ContentBuilder(response).build_content_item()
             return content_item
+
+    def get_content_items_feed(self):
+        pass
 
     def get_content_types(self):
         pass

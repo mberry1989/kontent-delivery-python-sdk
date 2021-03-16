@@ -1,5 +1,6 @@
 class UrlBuilder:
-    def build_url(self, client, endpoint, query_string=""):
+    @staticmethod
+    def build_url(client, endpoint, query_string=""):
         PROTOCOL = "https://"
         DELIVERY_DOMAIN = "deliver.kontent.ai/"
         PREVIEW_DOMAIN = "preview-deliver.kontent.ai/"

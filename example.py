@@ -13,13 +13,21 @@ r = client.get_content_items(
     Filter("","depth", 6)
 )
 # RESULTS
-for item in r.items:
-    print(item.name)
+for item in r.items: # array of ContentItems
+    print(item.name) # getting the values
 print(r.api_response.url)
 
 
 ## ITEM
 r2 = client.get_content_item("on_roasts")
 # RESULTS
-print(r2.name)
-print(r2.api_response.url)
+print(r2.codename)
+### TEXT
+print(r2.elements.title.value)
+### ASSET
+print(r2.elements.teaser_image.value[0].url)
+### LINKED_ITEMS
+print(r2.elements.related_articles.value) # codename array
+print(r2.get_linked_items("related_articles")) # array of ContentItems
+for item in r2.get_linked_items("related_articles"): # getting the item values
+    print(f"name: {item.name} summary: {item.elements.summary.value}") 

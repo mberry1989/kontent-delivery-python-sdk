@@ -7,7 +7,11 @@ class ContentBuilder:
         self.json = response.json()
 
     def build_content_item(self):
-        item = ContentItem(self.json["item"]["system"], self.json["item"]["elements"], self.response)
+        item = self.json["item"]
+        if self.json["modular_content"]:
+            item = ContentItem(item["system"], item["elements"], self.json["modular_content"], self.response)
+        else:
+            item = ContentItem(item["system"], item["elements"], self.response)
         return item        
 
     def build_content_item_listing(self):
