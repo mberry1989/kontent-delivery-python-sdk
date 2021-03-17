@@ -4,7 +4,8 @@ from types import SimpleNamespace
 
 
 class ContentItem:
-    def __init__(self, system:dict, elements:dict, modular_content = [], api_response:Response = None):
+    def __init__(self, system:dict, elements:dict, 
+                modular_content = [], api_response:Response = None):
         self.id = system["id"]
         self.name = system["name"]
         self.codename = system["codename"]

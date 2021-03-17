@@ -8,9 +8,10 @@ from delivery.request_manager import RequestManager
 class DeliveryClient:
     def __init__(self, project_id, **options):
         self.project_id = project_id
-        self.client_options=None
+        self.client_options = None
         if options:
             self.client_options = DeliveryOptionsBuilder().build_client_options(options)
+        self.custom_link_resolver = None
     
     def get_content_items(self, *filters: Filter):
         endpoint = "/items"
@@ -21,7 +22,7 @@ class DeliveryClient:
             url = UrlBuilder().build_url(self, endpoint)
         response = RequestManager().get_request(self, url)
         if response.ok:
-            content_item_listing = ContentBuilder(response).build_content_item_listing()     
+            content_item_listing = ContentBuilder(response, self).build_content_item_listing()     
             return content_item_listing
         
         return response.status_code
@@ -31,7 +32,7 @@ class DeliveryClient:
         url = UrlBuilder().build_url(self, endpoint)
         response = RequestManager().get_request(self, url)
         if response.ok:
-            content_item = ContentBuilder(response).build_content_item()
+            content_item = ContentBuilder(response, self).build_content_item()
             return content_item
 
     def get_content_items_feed(self):
