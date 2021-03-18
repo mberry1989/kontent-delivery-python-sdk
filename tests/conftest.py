@@ -1,3 +1,4 @@
+from samples.custom_item_resolver import CustomItemResolver
 import pytest
 import config
 from delivery.client import DeliveryClient
@@ -16,4 +17,5 @@ def preview_delivery_client():
 def delivery_client_with_resolvers():
     client = DeliveryClient(config.project_id)
     client.custom_link_resolver = CustomLinkResolver()
+    client.custom_item_resolver = CustomItemResolver()
     return client

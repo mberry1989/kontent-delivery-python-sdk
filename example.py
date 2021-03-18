@@ -26,6 +26,13 @@ r2 = client.get_content_item("coffee_processing_techniques")
 print(r2.codename)
 ### TEXT
 print(r2.elements.title.value)
+### MULTICHOICE
+print(r2.elements.radio_choices.value[0].codename) # radio - one option possible
+for check in r2.elements.checkbox_choices.value: # checkbox - multiple options possible
+    print(check.codename)
+### TAXONOMY
+for persona in r2.elements.personas.value:
+    print(persona.name)
 ### ASSET
 print(r2.elements.teaser_image.value[0].url)
 ### LINKED_ITEMS

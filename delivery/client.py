@@ -12,6 +12,7 @@ class DeliveryClient:
         if options:
             self.client_options = DeliveryOptionsBuilder().build_client_options(options)
         self.custom_link_resolver = None
+        self.custom_item_resolver = None
     
     def get_content_items(self, *filters: Filter):
         endpoint = "/items"
