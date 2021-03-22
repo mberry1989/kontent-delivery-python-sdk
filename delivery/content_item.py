@@ -20,13 +20,17 @@ class ContentItem:
         self.modular_content = modular_content
         self.api_response = api_response
 
-    def get_linked_items(self, element_codename):
-        linked_codenames = getattr(self.elements, element_codename)
-        linked_items = []
-        for codename in linked_codenames.value:
-            linked_item = self.modular_content[codename]
-            linked_items.append(ContentItem(linked_item["system"], linked_item["elements"]))
-        return linked_items
+    def get_linked_items(self, element_codename:str):
+        try:
+            linked_codenames = getattr(self.elements, element_codename)
+            linked_items = []
+            for codename in linked_codenames.value:
+                linked_item = self.modular_content[codename]  
+                linked_items.append(ContentItem(linked_item["system"], linked_item["elements"], self.modular_content))
+            return linked_items
+        except Exception as e:
+            print(f"Getting linked items failed with exception: {e}.")
+
 
 class ContentItemListing:
     def __init__(self, content_items:list, pagination:dict,
