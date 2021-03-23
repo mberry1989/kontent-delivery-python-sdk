@@ -1,9 +1,6 @@
-from delivery.content_item import ContentItem
-
-
 class CustomItemResolver:
     @staticmethod
-    def resolve_item(linked_item:ContentItem):
+    def resolve_item(linked_item):
         if linked_item.content_type == "article":
             return f"<h1>{linked_item.elements.title.value}</h1>"
             
