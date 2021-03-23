@@ -1,5 +1,3 @@
-# kontent-delivery-python-sdk
-
 # Kentico Kontent Python SDK
 
 ## Table of Contents
@@ -8,7 +6,11 @@
 - [Requesting items](#Requesting-items)
   - [Filtering](#Filtering)
 
+
 ## Installation
+To install the SDK from the Python Package Index use:  
+
+``` pip install kontent-delivery-python-sdk ```
 
 ## Creating a client
 To obtain content from Kentico Kontent, you will create an instance of DeliveryClient and pass it your Project ID:
@@ -68,22 +70,23 @@ print(response.elements.title.value)
 # coffee_processing_techniques
 # Coffee processing techniques
 ```
+
 Using this method will return a **ContentItem**.  To access elements and their values use dot notation in the format: 
 ```response.elements.element_name.value``` 
 
 
 Other attributes available on ContentItem:
-| Attribute | Description | Example
-| --- | --- | --- |
-| id | |
-| name | |
-| codename | |
-| language | |
-| content_type | |
-| last_modified | |
-| collection | |
-| workflow_step | |
-| modular_content| |
+| Attribute | Description |
+| --- | --- | 
+| id | An identifying GUID. |
+| name | The item's display name as seen in the Kontent UI.|
+| codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
+| language | The language that the returned item variant exists in. |
+| content_type | The content model used by the returned item.|
+| last_modified | The date the item was last editting in the Kontent UI.|
+| collection | The Collection the item is assigned to. |
+| workflow_step | The step the item is currently in. Note: Non-preview calls will only returned Published items.|
+| modular_content| Linked items and components associated to the returned item.|
 | api_response | Response object from the request.|
 
 ### Getting multiple items
@@ -149,7 +152,7 @@ Filter("", "depth", 6)
 | depth |Content items can reference other content items using linked items or rich text elements. These linked items can reference other items recursively. By default, the API returns only one level of linked items.|```Filter("", "depth", 6) ``` |
 | elements | When getting content items or content types, you can specify which elements to return by using the elements query parameter. | ```Filter("","elements","product_name")``` |
 
-Multiple filters and parameters can be passed into a single call:
+**Multiple filters and parameters can be passed into a single call:**
 ```python
 response = client.get_content_items(
     Filter("system.type", "[eq]", "coffee"),
