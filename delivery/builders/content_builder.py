@@ -2,6 +2,7 @@ from requests.models import Response
 from delivery.content_item import ContentItem, ContentItemListing
 from delivery.resolvers.content_link_resolver import ContentLinkResolver
 from delivery.resolvers.inline_item_resolver import InlineItemResolver
+from delivery.content_type import ContentType, ContentTypeListing
 
 class ContentBuilder:
     def __init__(self, response:Response, delivery_client = None):
@@ -29,3 +30,13 @@ class ContentBuilder:
         content_item_listing = ContentItemListing(items, self.json["pagination"], self.json["modular_content"], self.response)        
         
         return content_item_listing
+
+    def build_content_type(self, content_type = None):
+        if content_type == None:
+            content_type = ContentType(content_type["system"], content_type["elements"])
+        return content_type
+    
+    def build_content_type_listing(self):
+        content_types = [self.build_content_type(content_type) for content_type in self.json["types"]]
+        content_type_listing = ContentTypeListing(content_types, self.json["pagination"], self.response)
+        return content_type_listing
