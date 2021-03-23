@@ -4,7 +4,9 @@
 - [Installation](#Installation)
 - [Creating a client](#Creating-a-client)
 - [Requesting items](#Requesting-items)
-  - [Filtering](#Filtering)
+  - [Filtering](#Filtering-content)
+- [Resolving inline links](#Resolving-inline-links)
+- [Resolving inline items and components](#Resolving-inline-items-and-components)
 
 
 ## Installation
@@ -75,7 +77,7 @@ Using this method will return a **ContentItem**.  To access elements and their v
 ```response.elements.element_name.value``` 
 
 
-Other attributes available on ContentItem:
+#### ContentItem attributes:
 | Attribute | Description |
 | --- | --- | 
 | id | An identifying GUID. |
@@ -103,7 +105,8 @@ for item in response.items:
     # AeroPress Filters
     # ...
 ```
-Using the DeliveryClient's __get_content_items__ method will produce a **ContentItemListing** object that stores each retrieved item as a **ContentItem** in an "items" attribute.  ContentItemListing objects also store:
+Using the DeliveryClient's __get_content_items__ method will produce a **ContentItemListing** object that stores each retrieved item as a **ContentItem** in an "items" attribute.  
+#### ContentItemListing attributes:
 | Attribute | Description |
 | --- | --- |
 | pagination | Dictionary containing the skip, limit, count, and next page parameters.|
@@ -162,4 +165,75 @@ response = client.get_content_items(
     Filter("","depth", 6),
     Filter("","elements","product_name")
 )
+```
+## Rich Text Resolution
+Rich Text Elements in Kontent can contain inline references to other content items within the project using links, inline content items, or components. To accomplish this using the Python SDK you need to:
+1. Create a custom resolver
+2. Import your custom resolver
+3. Register the resolver with your DeliveryClient
+
+Once a custom resolver is implemented and registered to the client, resolution will automatically happen when a ContentItem or ContentItemListing is built.
+
+### Resolving inline links
+By default, Kentico Kontent returns inline content item links with an empty "href" attribute and a "data-item-id" attribute containing the content item ID:
+```html
+<!-- inline content item link -->
+<a data-item-id=\"80c7074b-3da1-4e1d-882b-c5716ebb4d25\" href=\"\">
+```
+To resolve the link, create a CustomLinkResolver that uses the **resolve_link()** method to evaluate and return an href string value:
+```python
+class CustomLinkResolver:
+    @staticmethod
+    def resolve_link(link):
+        if link.type == "coffee":
+            return f"/coffees/{link.url_slug}"
+            
+        if link.type == "article":
+            return f"/articles/{link.url_slug}"
+```
+The _link_ argument passed into **resolve_link()** allows you to access the link type, codename, and url_slug.
+
+Once a custom link resolver is implemented, import it and register to your DeliveryClient:
+```python
+from delivery.client import DeliveryClient
+# namespace for your custom resolver will vary
+from samples.custom_link_resolver import CustomLinkResolver
+
+client = DeliveryClient("your_project_id")
+client.custom_link_resolver = CustomLinkResolver()
+```
+
+### Resolving inline items and components
+By default, Kentico Kontent returns inline content items and components links as objects with identifying attributes like "data-type" and "data-codename." This attributes are used to identify the inline item:  
+
+```html
+<!-- Inline Content Item: -->
+<object type=\"application/kenticocloud\" data-type=\"item\" data-rel=\"link\" data-codename=\"on_roasts\"></object>
+<!-- Component: -->
+<object type=\"application/kenticocloud\" data-type=\"item\" data-rel=\"component\" data-codename=\"n71d0469e_9a77_0168_8f49_08f6d3bcaca3\"></object>
+```
+To resolve the inline item or component, create a CustomItemResolver that uses the **resolve_item()** method to replace the object elements:
+```python
+class CustomItemResolver:
+    @staticmethod
+    def resolve_item(linked_item):
+        if linked_item.content_type == "article":
+            return f"<h1>{linked_item.elements.title.value}</h1>"
+            
+        if linked_item.content_type == "tweet":
+            return (f"<blockquote class='twitter-tweet' data-lang='en'"
+                    f"data-theme={linked_item.elements.theme.value[0].codename}>"
+                    f"<a href={linked_item.elements.tweet_link.value}></a></blockquote>")
+```
+The _linked_item_ argument passed into **resolve_item()** is a [ContentItem](#ContentItem-attributes). 
+
+Once a custom link resolver is implemented, import it and register to your DeliveryClient:  
+```python
+from delivery.client import DeliveryClient
+# namespace for your custom resolver will vary
+from samples.custom_item_resolver import CustomItemResolver
+
+client = DeliveryClient(config.project_id, options=config.delivery_options)
+client.custom_item_resolver = CustomItemResolver()
+
 ```
