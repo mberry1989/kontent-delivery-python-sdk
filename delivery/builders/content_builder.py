@@ -3,6 +3,7 @@ from delivery.content_item import ContentItem, ContentItemListing
 from delivery.resolvers.content_link_resolver import ContentLinkResolver
 from delivery.resolvers.inline_item_resolver import InlineItemResolver
 from delivery.content_type import ContentType, ContentTypeListing
+from delivery.taxonomy_group import TaxonomyGroup, TaxonomyGroupListing
 
 class ContentBuilder:
     def __init__(self, response:Response, delivery_client = None):
@@ -41,3 +42,15 @@ class ContentBuilder:
         content_types = [self.build_content_type(content_type) for content_type in self.json["types"]]
         content_type_listing = ContentTypeListing(content_types, self.json["pagination"], self.response)
         return content_type_listing
+
+    def build_taxonomy_group(self, taxonomy_group = None):
+        if taxonomy_group == None:
+            taxonomy_group = self.json
+        taxonomy_group = TaxonomyGroup(taxonomy_group["system"], taxonomy_group["terms"], self.response)
+        return taxonomy_group
+
+    def build_taxonomy_group_listing(self):
+        taxonomy_groups = [self.build_taxonomy_group(taxonomy_group) for taxonomy_group in self.json["taxonomies"]]
+        taxonomy_group_listing = TaxonomyGroupListing(taxonomy_groups, self.json["pagination"], self.response)
+        return taxonomy_group_listing
+    

@@ -55,3 +55,20 @@ class DeliveryClient:
         if response.ok:
             content_type = ContentBuilder(response, self).build_content_type()
             return content_type
+
+    
+    def get_taxonomies(self):
+        endpoint = f"/taxonomies"
+        url = UrlBuilder().build_url(self, endpoint)
+        response = RequestManager().get_request(self, url)
+        if response.ok:
+            taxonomy_listing = ContentBuilder(response, self).build_taxonomy_group_listing()
+            return taxonomy_listing   
+
+    def get_taxonomy(self, codename:str):
+        endpoint = f"/taxonomies/{codename}"
+        url = UrlBuilder().build_url(self, endpoint)
+        response = RequestManager().get_request(self, url)
+        if response.ok:
+            taxonomy_group = ContentBuilder(response, self).build_taxonomy_group()
+            return taxonomy_group
