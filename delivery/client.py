@@ -14,6 +14,7 @@ class DeliveryClient:
         self.custom_link_resolver = None
         self.custom_item_resolver = None
     
+    
     def get_content_items(self, *filters: Filter):
         endpoint = "/items"
         if filters:
@@ -27,7 +28,8 @@ class DeliveryClient:
             return content_item_listing
         
         return response.status_code
-        
+
+
     def get_content_item(self, codename:str):
         endpoint = f"/items/{codename}"
         url = UrlBuilder().build_url(self, endpoint)
@@ -36,10 +38,20 @@ class DeliveryClient:
             content_item = ContentBuilder(response, self).build_content_item()
             return content_item
 
-    def get_content_items_feed(self):
-        pass
 
     def get_content_types(self):
-        pass
-    def get_content_type(self):
-        pass
+        endpoint = f"/types"
+        url = UrlBuilder().build_url(self, endpoint)
+        response = RequestManager().get_request(self, url)
+        if response.ok:
+            content_type_listing = ContentBuilder(response, self).build_content_type_listing()
+            return content_type_listing
+
+
+    def get_content_type(self, codename:str):
+        endpoint = f"/types/{codename}"
+        url = UrlBuilder().build_url(self, endpoint)
+        response = RequestManager().get_request(self, url)
+        if response.ok:
+            content_type = ContentBuilder(response, self).build_content_type()
+            return content_type

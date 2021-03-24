@@ -20,6 +20,14 @@ def single_item_path():
 def articles_path():
     return "tests/fixtures/articles_with_depth_6.json"
 
+@pytest.fixture
+def article_type_path():
+    return "tests/fixtures/article_type.json"
+
+@pytest.fixture
+def types_path():
+    return "tests/fixtures/types.json"
+
 
 # RESPONSES
 @pytest.fixture
@@ -46,8 +54,20 @@ def mock_articles_response(monkeypatch, articles_path):
         return MockResponse(articles_path)
     monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
+@pytest.fixture
+def mock_article_type_response(monkeypatch, article_type_path):
+    def mock_get(*args):
+        return MockResponse(article_type_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
-# MOCKS
+@pytest.fixture
+def mock_types_response(monkeypatch, types_path):
+    def mock_get(*args):
+        return MockResponse(types_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+
+# MOCK
 class MockResponse:
     def __init__(self, path):
         self.ok = True
@@ -60,6 +80,8 @@ class MockResponse:
         
         
 # TESTS
+
+## ITEMS
 @pytest.mark.usefixtures("delivery_client")
 def test_get_items_without_filters(delivery_client, mock_items_response):
     r = delivery_client.get_content_items()
@@ -113,3 +135,21 @@ def test_get_linked_items_depth(delivery_client, mock_articles_response):
     assert o.codename == "on_roasts"
     assert a.codename == "origins_of_arabica_bourbon"
     assert d.codename == "donate_with_us"
+
+## TYPES
+@pytest.mark.usefixtures("delivery_client")
+def test_get_article_type(delivery_client, mock_article_type_response):
+    r = delivery_client.get_content_type("article")
+    assert r.codename == "article"
+    assert r.elements.title.name == "Title"
+    assert r.elements.title.type == "text"
+    assert r.elements.checkbox_choices.options[0].codename == "one"
+
+@pytest.mark.usefixtures("delivery_client")
+def test_get_types(delivery_client, mock_types_response):
+    r = delivery_client.get_content_types()
+    first_type = r.types[0]
+    assert r.count >= 13
+    assert first_type.codename == "about_us"
+    assert first_type.elements.facts.name == "Facts"
+    assert first_type.elements.facts.type == "modular_content"
