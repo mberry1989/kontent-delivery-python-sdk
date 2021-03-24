@@ -4,6 +4,7 @@ from delivery.resolvers.content_link_resolver import ContentLinkResolver
 from delivery.resolvers.inline_item_resolver import InlineItemResolver
 from delivery.content_type import ContentType, ContentTypeListing
 from delivery.taxonomy_group import TaxonomyGroup, TaxonomyGroupListing
+from delivery.language import Language, LanguageListing
 
 class ContentBuilder:
     def __init__(self, response:Response, delivery_client = None):
@@ -28,20 +29,22 @@ class ContentBuilder:
 
     def build_content_item_listing(self):
         items = [self.build_content_item(item) for item in self.json["items"]]
-        content_item_listing = ContentItemListing(items, self.json["pagination"], self.json["modular_content"], self.response)        
-        
+        content_item_listing = ContentItemListing(items, self.json["pagination"], self.json["modular_content"], self.response)          
         return content_item_listing
+
 
     def build_content_type(self, content_type = None):
         if content_type == None:
             content_type = self.json
         content_type = ContentType(content_type["system"], content_type["elements"], self.response)
         return content_type
+
     
     def build_content_type_listing(self):
         content_types = [self.build_content_type(content_type) for content_type in self.json["types"]]
         content_type_listing = ContentTypeListing(content_types, self.json["pagination"], self.response)
         return content_type_listing
+
 
     def build_taxonomy_group(self, taxonomy_group = None):
         if taxonomy_group == None:
@@ -49,8 +52,22 @@ class ContentBuilder:
         taxonomy_group = TaxonomyGroup(taxonomy_group["system"], taxonomy_group["terms"], self.response)
         return taxonomy_group
 
+
     def build_taxonomy_group_listing(self):
         taxonomy_groups = [self.build_taxonomy_group(taxonomy_group) for taxonomy_group in self.json["taxonomies"]]
         taxonomy_group_listing = TaxonomyGroupListing(taxonomy_groups, self.json["pagination"], self.response)
         return taxonomy_group_listing
+
+
+    def build_language(self, language = None):
+        if language == None:
+            language = self.json
+        language = Language(language["system"], self.response)
+        return language
+
+
+    def build_language_listing(self):
+        languages = [self.build_language(language) for language in self.json["languages"]]
+        language_listing = LanguageListing(languages, self.json["pagination"], self.response)
+        return language_listing
     

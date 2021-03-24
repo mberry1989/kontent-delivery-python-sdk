@@ -61,3 +61,12 @@ def test_get_taxonomy_pass(delivery_client):
     r = delivery_client.get_taxonomy("personas")
     assert r.api_response.ok == True
     assert r.codename
+
+# LANGUAGES
+@pytest.mark.skip(reason)
+@pytest.mark.usefixtures("delivery_client")
+def test_get_languages_pass(delivery_client):
+    r = delivery_client.get_languages()
+    assert r.api_response.ok == True
+    assert len(r.languages) > 0
+    assert r.count > 0
