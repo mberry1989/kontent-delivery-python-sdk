@@ -33,7 +33,8 @@ class ContentBuilder:
 
     def build_content_type(self, content_type = None):
         if content_type == None:
-            content_type = ContentType(content_type["system"], content_type["elements"])
+            content_type = self.json
+        content_type = ContentType(content_type["system"], content_type["elements"], self.response)
         return content_type
     
     def build_content_type_listing(self):
