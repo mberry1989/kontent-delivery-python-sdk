@@ -65,6 +65,7 @@ class DeliveryClient:
             taxonomy_listing = ContentBuilder(response, self).build_taxonomy_group_listing()
             return taxonomy_listing   
 
+
     def get_taxonomy(self, codename:str):
         endpoint = f"/taxonomies/{codename}"
         url = UrlBuilder().build_url(self, endpoint)
@@ -72,3 +73,12 @@ class DeliveryClient:
         if response.ok:
             taxonomy_group = ContentBuilder(response, self).build_taxonomy_group()
             return taxonomy_group
+
+    
+    def get_languages(self):
+        endpoint = f"/languages"
+        url = UrlBuilder().build_url(self, endpoint)
+        response = RequestManager().get_request(self, url)
+        if response.ok:
+            language_listing = ContentBuilder(response, self).build_language_listing()
+            return language_listing 

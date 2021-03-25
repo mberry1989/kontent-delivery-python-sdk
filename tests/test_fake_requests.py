@@ -36,6 +36,10 @@ def taxonomies_path():
 def taxonomy_path():
     return "tests/fixtures/taxonomy_group.json"
 
+@pytest.fixture
+def languages_path():
+    return "tests/fixtures/languages.json"
+
 
 # RESPONSES
 @pytest.fixture
@@ -84,6 +88,12 @@ def mock_taxonomy_response(monkeypatch, taxonomy_path):
 def mock_taxonomies_response(monkeypatch, taxonomies_path):
     def mock_get(*args):
         return MockResponse(taxonomies_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+@pytest.fixture
+def mock_languages_response(monkeypatch, languages_path):
+    def mock_get(*args):
+        return MockResponse(languages_path)
     monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
 
@@ -186,3 +196,9 @@ def test_get_taxonomies(delivery_client, mock_taxonomies_response):
     r = delivery_client.get_taxonomies()
     assert r.count > 0
     assert len(r.taxonomy_groups) > 0
+
+## LANGUAGES
+@pytest.mark.usefixtures("delivery_client")
+def test_languages(delivery_client, mock_languages_response):
+    r = delivery_client.get_languages()
+    assert len(r.languages) > 0

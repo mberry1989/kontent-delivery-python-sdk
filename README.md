@@ -16,6 +16,7 @@
 - [Requesting Taxonomies](#Requesting-taxonomies)
   - [Getting a taxonomy group](#Getting-a-taxonomy-group)
   - [Getting multiple taxonomies](#Getting-multiple-taxonomies)
+- [Listing languages](#Listing-languages)
 
 
 ## Installation
@@ -362,4 +363,36 @@ Using the DeliveryClient's __get_taxonomies__ method will produce a **TaxonomyGr
 | limit | Sets the number of objects to retrieve in a single request.|
 | count | The number of items in the response. |
 | next_page | Contains the next page of results.|
+| api_response | Response object from the request.|
+
+## Listing languages
+Using the DeliveryClient's __get_languages__ method will produce a **LanguageListing** object that stores each retrieved language as a **Language** in the "languages" attribute.   
+
+To access language values loop through the language listing and use dot notation: 
+```python
+for language in response.languages:
+    print(language.name)
+    # prints:
+    # English (United States)
+    # Spanish (Spain)
+    # ...
+```   
+
+#### **LanguageListing attributes:**
+| Attribute | Description |
+| --- | --- |
+| languages | Contains a list of languages.|
+| pagination | Dictionary containing the skip, limit, count, and next page parameters.|
+| skip | Sets the number of objects to skip when requesting a list of objects.|
+| limit | Sets the number of objects to retrieve in a single request.|
+| count | The number of languages in the response. |
+| next_page | Contains the next page of results.|
+| api_response | Response object from the request.|
+
+#### **Language attributes:**
+| Attribute | Description |
+| --- | --- | 
+| id | An identifying GUID. |
+| name | The langauge's display name as seen in the Kontent UI.|
+| codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
 | api_response | Response object from the request.|  
