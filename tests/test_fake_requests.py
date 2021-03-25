@@ -28,6 +28,14 @@ def article_type_path():
 def types_path():
     return "tests/fixtures/types.json"
 
+@pytest.fixture
+def taxonomies_path():
+    return "tests/fixtures/taxonomies.json"
+
+@pytest.fixture
+def taxonomy_path():
+    return "tests/fixtures/taxonomy_group.json"
+
 
 # RESPONSES
 @pytest.fixture
@@ -64,6 +72,18 @@ def mock_article_type_response(monkeypatch, article_type_path):
 def mock_types_response(monkeypatch, types_path):
     def mock_get(*args):
         return MockResponse(types_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+@pytest.fixture
+def mock_taxonomy_response(monkeypatch, taxonomy_path):
+    def mock_get(*args):
+        return MockResponse(taxonomy_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+@pytest.fixture
+def mock_taxonomies_response(monkeypatch, taxonomies_path):
+    def mock_get(*args):
+        return MockResponse(taxonomies_path)
     monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
 
@@ -153,3 +173,16 @@ def test_get_types(delivery_client, mock_types_response):
     assert first_type.codename == "about_us"
     assert first_type.elements.facts.name == "Facts"
     assert first_type.elements.facts.type == "modular_content"
+
+## TAXONOMIES
+@pytest.mark.usefixtures("delivery_client")
+def test_taxonomy(delivery_client, mock_taxonomy_response):
+    r = delivery_client.get_taxonomy("personas")
+    assert r.codename
+    assert len(r.terms) > 0
+
+@pytest.mark.usefixtures("delivery_client")
+def test_get_taxonomies(delivery_client, mock_taxonomies_response):
+    r = delivery_client.get_taxonomies()
+    assert r.count > 0
+    assert len(r.taxonomy_groups) > 0

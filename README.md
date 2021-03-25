@@ -13,6 +13,9 @@
 - [Requesting content types](#Requesting-content-types)
   - [Getting a content type](#Getting-a-content-type)
   - [Getting multiple content types](#Getting-multiple-content-types)
+- [Requesting Taxonomies](#Requesting-taxonomies)
+  - [Getting a taxonomy group](#Getting-a-taxonomy-group)
+  - [Getting multiple taxonomies](#Getting-multiple-taxonomies)
 
 
 ## Installation
@@ -94,6 +97,7 @@ Using this method will return a **ContentItem**.  To access elements and their v
 | last_modified | The date the item was last editted in the Kontent UI.|
 | collection | The Collection the item is assigned to. |
 | workflow_step | The step the item is currently in. Note: Non-preview calls will only returned Published items.|
+| elements | Contains the content item values and element type information.|
 | modular_content| Linked items and components associated to the returned item.|
 | api_response | Response object from the request.|
 
@@ -115,6 +119,7 @@ Using the DeliveryClient's __get_content_items__ method will produce a **Content
 #### **ContentItemListing attributes:**
 | Attribute | Description |
 | --- | --- |
+| items | Contains the items returned in the response.|
 | pagination | Dictionary containing the skip, limit, count, and next page parameters.|
 | skip | Sets the number of objects to skip when requesting a list of objects.|
 | limit | Sets the number of objects to retrieve in a single request.|
@@ -272,6 +277,7 @@ Using this method will return a **ContentType**.  To access elements and their v
 | name | The type's display name as seen in the Kontent UI.|
 | codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
 | last_modified | The date the type was last editted in the Kontent UI.|
+| elements | Contains the content type elements.|
 | api_response | Response object from the request.|  
 
 
@@ -293,9 +299,67 @@ Using the DeliveryClient's __get_content_types__ method will produce a **Content
 #### **ContentTypeListing attributes:**
 | Attribute | Description |
 | --- | --- |
+| content_types | Contains the listing of project content types.|
 | pagination | Dictionary containing the skip, limit, count, and next page parameters.|
 | skip | Sets the number of objects to skip when requesting a list of objects.|
 | limit | Sets the number of objects to retrieve in a single request.|
 | count | The number of items in the response. |
 | next_page | Contains the next page of results.|
-| api_response | Response object from the request.|
+| api_response | Response object from the request.|  
+
+## Requesting taxonomies
+
+### Getting a taxonomy group
+Getting a taxonomy group from Kontent can be accomplished by using the DeliveryClient's __get_taxonomy__ method and passing in the taxonomy group's codename:
+```python
+response = client.get_taxonomy("personas")
+
+print(response.codename)
+print(response.terms)
+print(response.terms[0].codename)
+# prints:
+# personas
+# [namespace(name='Coffee expert', codename='coffee_expert', terms=[namespace(name='Barista', codename='barista', terms=[]) ...
+# coffee_expert
+
+```
+
+Using this method will return a **TaxonomyGroup**.  To access terms and their values use dot notation in the format: 
+```response.terms[list_postion].attribute_name``` 
+
+You can get term and nested term values by looping through the terms lists or chaining together __.terms[list_postion]__:
+```python
+for term in response.terms:
+    print(term.name)
+    # prints:
+    # Coffee expert
+    # Coffee enthusiast
+    # ...
+print(response.terms[0].terms[0].codename)
+# prints:
+# barista
+```
+
+#### **TaxonomyGroup attributes:**
+| Attribute | Description |
+| --- | --- | 
+| id | An identifying GUID. |
+| name | The type's display name as seen in the Kontent UI.|
+| codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
+| last_modified | The date the type was last editted in the Kontent UI.|
+| terms | Taxonomy group terms containing name, codename, and nested terms.|
+| api_response | Response object from the request.|  
+
+### Getting multiple taxonomies
+Using the DeliveryClient's __get_taxonomies__ method will produce a **TaxonomyGroupListing** object that stores each retrieved item as a **TaxonomyGroup** in the "taxonomy_groups" attribute.  
+
+#### **TaxonomyGroupListing attributes:**
+| Attribute | Description |
+| --- | --- |
+| taxonomy_groups | Contains the listing of taxonomy groups.|
+| pagination | Dictionary containing the skip, limit, count, and next page parameters.|
+| skip | Sets the number of objects to skip when requesting a list of objects.|
+| limit | Sets the number of objects to retrieve in a single request.|
+| count | The number of items in the response. |
+| next_page | Contains the next page of results.|
+| api_response | Response object from the request.|  

@@ -46,3 +46,18 @@ def test_get_content_types_pass(delivery_client):
     r = delivery_client.get_content_types()
     assert r.api_response.ok == True
     assert r.count > 0
+
+# TAXONOMIES
+@pytest.mark.skip(reason)
+@pytest.mark.usefixtures("delivery_client")
+def test_get_taxonomies_pass(delivery_client):
+    r = delivery_client.get_taxonomies()
+    assert r.api_response.ok == True
+    assert r.count > 0
+
+@pytest.mark.skip(reason)
+@pytest.mark.usefixtures("delivery_client")
+def test_get_taxonomy_pass(delivery_client):
+    r = delivery_client.get_taxonomy("personas")
+    assert r.api_response.ok == True
+    assert r.codename
