@@ -22,6 +22,8 @@ print(r.api_response.url)
 
 ## ITEM
 r2 = client.get_content_item("coffee_processing_techniques")
+# r2 = client.get_content_item("brisbane") # draft item for preview test
+
 # RESULTS
 print(r2.codename)
 ### TEXT

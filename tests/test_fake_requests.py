@@ -1,7 +1,9 @@
+import tests.conftest_keys as test_config
 import json
 import pytest
 from delivery.request_manager import RequestManager
 from delivery.builders.filter_builder import Filter
+from delivery.client import DeliveryClient
 
 # PATHS
 @pytest.fixture
@@ -113,3 +115,19 @@ def test_get_linked_items_depth(delivery_client, mock_articles_response):
     assert o.codename == "on_roasts"
     assert a.codename == "origins_of_arabica_bourbon"
     assert d.codename == "donate_with_us"
+
+@pytest.mark.usefixtures("delivery_client_with_options")
+def test_get_preview_items(delivery_client_with_options, mock_articles_response):
+    delivery_client_with_options.client_options.preview = True
+    r = delivery_client_with_options.get_content_items()
+    c = r.items[1]
+
+    assert c.codename == "coffee_processing_techniques"
+
+@pytest.mark.usefixtures("delivery_client_with_options")
+def test_get_secured_items(delivery_client_with_options, mock_articles_response):
+    delivery_client_with_options.client_options.secured = True
+    r = delivery_client_with_options.get_content_items()
+    c = r.items[1]
+
+    assert c.codename == "coffee_processing_techniques"
