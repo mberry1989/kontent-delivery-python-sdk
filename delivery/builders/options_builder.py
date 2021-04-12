@@ -3,6 +3,8 @@ class DeliveryOptionsBuilder():
         super().__init__()
 
     def build_client_options(self, options):
+        if  options["options"].get("secured") == True and options["options"].get("preview") == True:
+            raise ValueError("Preview and Secured API cannot be used simultaneously. Disable one in your application's configuration.")
         for key, value in options.items():
             if "preview" in value:
                 self.preview = value["preview"]
