@@ -1,9 +1,7 @@
-import tests.conftest_keys as test_config
 import json
 import pytest
 from delivery.request_manager import RequestManager
 from delivery.builders.filter_builder import Filter
-from delivery.client import DeliveryClient
 
 # PATHS
 @pytest.fixture
@@ -21,6 +19,26 @@ def single_item_path():
 @pytest.fixture
 def articles_path():
     return "tests/fixtures/articles_with_depth_6.json"
+
+@pytest.fixture
+def article_type_path():
+    return "tests/fixtures/article_type.json"
+
+@pytest.fixture
+def types_path():
+    return "tests/fixtures/types.json"
+
+@pytest.fixture
+def taxonomies_path():
+    return "tests/fixtures/taxonomies.json"
+
+@pytest.fixture
+def taxonomy_path():
+    return "tests/fixtures/taxonomy_group.json"
+
+@pytest.fixture
+def languages_path():
+    return "tests/fixtures/languages.json"
 
 
 # RESPONSES
@@ -48,8 +66,38 @@ def mock_articles_response(monkeypatch, articles_path):
         return MockResponse(articles_path)
     monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
+@pytest.fixture
+def mock_article_type_response(monkeypatch, article_type_path):
+    def mock_get(*args):
+        return MockResponse(article_type_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
-# MOCKS
+@pytest.fixture
+def mock_types_response(monkeypatch, types_path):
+    def mock_get(*args):
+        return MockResponse(types_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+@pytest.fixture
+def mock_taxonomy_response(monkeypatch, taxonomy_path):
+    def mock_get(*args):
+        return MockResponse(taxonomy_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+@pytest.fixture
+def mock_taxonomies_response(monkeypatch, taxonomies_path):
+    def mock_get(*args):
+        return MockResponse(taxonomies_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+@pytest.fixture
+def mock_languages_response(monkeypatch, languages_path):
+    def mock_get(*args):
+        return MockResponse(languages_path)
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
+
+# MOCK
 class MockResponse:
     def __init__(self, path):
         self.ok = True
@@ -62,6 +110,8 @@ class MockResponse:
         
         
 # TESTS
+
+## ITEMS
 @pytest.mark.usefixtures("delivery_client")
 def test_get_items_without_filters(delivery_client, mock_items_response):
     r = delivery_client.get_content_items()
@@ -116,6 +166,7 @@ def test_get_linked_items_depth(delivery_client, mock_articles_response):
     assert a.codename == "origins_of_arabica_bourbon"
     assert d.codename == "donate_with_us"
 
+### PREVIEW
 @pytest.mark.usefixtures("delivery_client_with_options")
 def test_get_preview_items(delivery_client_with_options, mock_articles_response):
     delivery_client_with_options.client_options.preview = True
@@ -124,6 +175,7 @@ def test_get_preview_items(delivery_client_with_options, mock_articles_response)
 
     assert c.codename == "coffee_processing_techniques"
 
+### SECURED
 @pytest.mark.usefixtures("delivery_client_with_options")
 def test_get_secured_items(delivery_client_with_options, mock_articles_response):
     delivery_client_with_options.client_options.secured = True
@@ -131,3 +183,39 @@ def test_get_secured_items(delivery_client_with_options, mock_articles_response)
     c = r.items[1]
 
     assert c.codename == "coffee_processing_techniques"
+## TYPES
+@pytest.mark.usefixtures("delivery_client")
+def test_get_article_type(delivery_client, mock_article_type_response):
+    r = delivery_client.get_content_type("article")
+    assert r.codename == "article"
+    assert r.elements.title.name == "Title"
+    assert r.elements.title.type == "text"
+    assert r.elements.checkbox_choices.options[0].codename == "one"
+
+@pytest.mark.usefixtures("delivery_client")
+def test_get_types(delivery_client, mock_types_response):
+    r = delivery_client.get_content_types()
+    first_type = r.types[0]
+    assert r.count >= 13
+    assert first_type.codename == "about_us"
+    assert first_type.elements.facts.name == "Facts"
+    assert first_type.elements.facts.type == "modular_content"
+
+## TAXONOMIES
+@pytest.mark.usefixtures("delivery_client")
+def test_taxonomy(delivery_client, mock_taxonomy_response):
+    r = delivery_client.get_taxonomy("personas")
+    assert r.codename
+    assert len(r.terms) > 0
+
+@pytest.mark.usefixtures("delivery_client")
+def test_get_taxonomies(delivery_client, mock_taxonomies_response):
+    r = delivery_client.get_taxonomies()
+    assert r.count > 0
+    assert len(r.taxonomy_groups) > 0
+
+## LANGUAGES
+@pytest.mark.usefixtures("delivery_client")
+def test_languages(delivery_client, mock_languages_response):
+    r = delivery_client.get_languages()
+    assert len(r.languages) > 0

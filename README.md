@@ -4,9 +4,19 @@
 - [Installation](#Installation)
 - [Creating a client](#Creating-a-client)
 - [Requesting items](#Requesting-items)
-  - [Filtering](#Filtering-content)
-- [Resolving inline links](#Resolving-inline-links)
-- [Resolving inline items and components](#Resolving-inline-items-and-components)
+  - [Getting a single item](#Getting-a-single-item)
+  - [Getting multiple items](#Getting-multiple-items)
+  - [Filtering content](#Filtering-content)
+- [Rich Text Resolution](#Rich-text-resolution)
+  - [Resolving inline links](#Resolving-inline-links)
+  - [Resolving inline items and components](#Resolving-inline-items-and-components)
+- [Requesting content types](#Requesting-content-types)
+  - [Getting a content type](#Getting-a-content-type)
+  - [Getting multiple content types](#Getting-multiple-content-types)
+- [Requesting Taxonomies](#Requesting-taxonomies)
+  - [Getting a taxonomy group](#Getting-a-taxonomy-group)
+  - [Getting multiple taxonomies](#Getting-multiple-taxonomies)
+- [Listing languages](#Listing-languages)
 
 
 ## Installation
@@ -46,7 +56,7 @@ from delivery.client import DeliveryClient
 client = DeliveryClient(config.project_id, options=config.delivery_options)
 ```
 
-### Delivery options
+### **Delivery options**
 | Option | Values Type | Description |
 | --- | --- | --- |
 | preview | bool | Determines whether client will use [Kontent's Preview API](https://docs.kontent.ai/reference/delivery-api#section/Production-vs.-Preview) |
@@ -77,7 +87,7 @@ Using this method will return a **ContentItem**.  To access elements and their v
 ```response.elements.element_name.value``` 
 
 
-#### ContentItem attributes:
+#### **ContentItem attributes:**
 | Attribute | Description |
 | --- | --- | 
 | id | An identifying GUID. |
@@ -85,9 +95,10 @@ Using this method will return a **ContentItem**.  To access elements and their v
 | codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
 | language | The language that the returned item variant exists in. |
 | content_type | The content model used by the returned item.|
-| last_modified | The date the item was last editting in the Kontent UI.|
+| last_modified | The date the item was last editted in the Kontent UI.|
 | collection | The Collection the item is assigned to. |
 | workflow_step | The step the item is currently in. Note: Non-preview calls will only returned Published items.|
+| elements | Contains the content item values and element type information.|
 | modular_content| Linked items and components associated to the returned item.|
 | api_response | Response object from the request.|
 
@@ -106,9 +117,10 @@ for item in response.items:
     # ...
 ```
 Using the DeliveryClient's __get_content_items__ method will produce a **ContentItemListing** object that stores each retrieved item as a **ContentItem** in an "items" attribute.  
-#### ContentItemListing attributes:
+#### **ContentItemListing attributes:**
 | Attribute | Description |
 | --- | --- |
+| items | Contains the items returned in the response.|
 | pagination | Dictionary containing the skip, limit, count, and next page parameters.|
 | skip | Sets the number of objects to skip when requesting a list of objects.|
 | limit | Sets the number of objects to retrieve in a single request.|
@@ -131,7 +143,7 @@ Filters can also be used for Kontent's Projection and parameters following the s
 ```python
 Filter("", "depth", 6)
 ```
-**Filters:**
+#### **Filters:**
 | Operator | Description | Example |
 | --- | --- | --- |
 | [eq] |Property value equals the specified value.| ```Filter("system.type", "[eq]", "coffee")```|
@@ -149,7 +161,7 @@ Filter("", "depth", 6)
 | [any] |Property with an array of values contains at least one value from the specified list of values.|```Filter("elements.processing", "[any]", "wet__washed_,semi_dry")``` |
 | [all] |Property with an array of values contains all of the specified values.|```Filter("elements.sitemap", "[all]", "coffee,products")``` |  
   
- **Parameters and Projection:**
+#### **Parameters and Projection:**
 | Operator | Description | Example |
 | --- | --- | --- |
 | depth |Content items can reference other content items using linked items or rich text elements. These linked items can reference other items recursively. By default, the API returns only one level of linked items.|```Filter("", "depth", 6) ``` |
@@ -166,7 +178,7 @@ response = client.get_content_items(
     Filter("","elements","product_name")
 )
 ```
-## Rich Text Resolution
+## Rich text resolution
 Rich Text Elements in Kontent can contain inline references to other content items within the project using links, inline content items, or components. To accomplish this using the Python SDK you need to:
 1. Create a custom resolver
 2. Import your custom resolver
@@ -237,3 +249,150 @@ client = DeliveryClient(config.project_id, options=config.delivery_options)
 client.custom_item_resolver = CustomItemResolver()
 
 ```
+
+## Requesting content types
+
+### Getting a content type
+Getting a content type from Kontent can be accomplished by using the DeliveryClient's __get_content_type__ method and passing in the content type's codename:
+```python
+response = client.get_content_type("article")
+
+print(response.codename)
+print(response.elements.body_copy)
+print(response.elements.body_copy.name)
+
+# prints:
+# article
+# namespace(type='rich_text', name='Body Copy')
+# Body Copy
+```
+
+Using this method will return a **ContentType**.  To access elements and their values use dot notation in the format: 
+```response.elements.element_name.attribute_name``` 
+
+
+#### **ContentType attributes:**
+| Attribute | Description |
+| --- | --- | 
+| id | An identifying GUID. |
+| name | The type's display name as seen in the Kontent UI.|
+| codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
+| last_modified | The date the type was last editted in the Kontent UI.|
+| elements | Contains the content type elements.|
+| api_response | Response object from the request.|  
+
+
+### Getting multiple content types
+Getting a type listing from Kontent can be accomplished by using the DeliveryClient's __get_content_types__ method:
+
+```python
+response = client.get_content_types()
+
+for content_type in response.types:
+    print(content_type.name)
+    # prints:
+    # About us
+    # Accessory
+    # Article
+    # ...
+```
+Using the DeliveryClient's __get_content_types__ method will produce a **ContentTypeListing** object that stores each retrieved item as a **ContentType** in the "types" attribute.  
+#### **ContentTypeListing attributes:**
+| Attribute | Description |
+| --- | --- |
+| content_types | Contains the listing of project content types.|
+| pagination | Dictionary containing the skip, limit, count, and next page parameters.|
+| skip | Sets the number of objects to skip when requesting a list of objects.|
+| limit | Sets the number of objects to retrieve in a single request.|
+| count | The number of items in the response. |
+| next_page | Contains the next page of results.|
+| api_response | Response object from the request.|  
+
+## Requesting taxonomies
+
+### Getting a taxonomy group
+Getting a taxonomy group from Kontent can be accomplished by using the DeliveryClient's __get_taxonomy__ method and passing in the taxonomy group's codename:
+```python
+response = client.get_taxonomy("personas")
+
+print(response.codename)
+print(response.terms)
+print(response.terms[0].codename)
+# prints:
+# personas
+# [namespace(name='Coffee expert', codename='coffee_expert', terms=[namespace(name='Barista', codename='barista', terms=[]) ...
+# coffee_expert
+
+```
+
+Using this method will return a **TaxonomyGroup**.  To access terms and their values use dot notation in the format: 
+```response.terms[list_postion].attribute_name``` 
+
+You can get term and nested term values by looping through the terms lists or chaining together __.terms[list_postion]__:
+```python
+for term in response.terms:
+    print(term.name)
+    # prints:
+    # Coffee expert
+    # Coffee enthusiast
+    # ...
+print(response.terms[0].terms[0].codename)
+# prints:
+# barista
+```
+
+#### **TaxonomyGroup attributes:**
+| Attribute | Description |
+| --- | --- | 
+| id | An identifying GUID. |
+| name | The type's display name as seen in the Kontent UI.|
+| codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
+| last_modified | The date the type was last editted in the Kontent UI.|
+| terms | Taxonomy group terms containing name, codename, and nested terms.|
+| api_response | Response object from the request.|  
+
+### Getting multiple taxonomies
+Using the DeliveryClient's __get_taxonomies__ method will produce a **TaxonomyGroupListing** object that stores each retrieved item as a **TaxonomyGroup** in the "taxonomy_groups" attribute.  
+
+#### **TaxonomyGroupListing attributes:**
+| Attribute | Description |
+| --- | --- |
+| taxonomy_groups | Contains the listing of taxonomy groups.|
+| pagination | Dictionary containing the skip, limit, count, and next page parameters.|
+| skip | Sets the number of objects to skip when requesting a list of objects.|
+| limit | Sets the number of objects to retrieve in a single request.|
+| count | The number of items in the response. |
+| next_page | Contains the next page of results.|
+| api_response | Response object from the request.|
+
+## Listing languages
+Using the DeliveryClient's __get_languages__ method will produce a **LanguageListing** object that stores each retrieved language as a **Language** in the "languages" attribute.   
+
+To access language values loop through the language listing and use dot notation: 
+```python
+for language in response.languages:
+    print(language.name)
+    # prints:
+    # English (United States)
+    # Spanish (Spain)
+    # ...
+```   
+
+#### **LanguageListing attributes:**
+| Attribute | Description |
+| --- | --- |
+| languages | Contains a list of languages.|
+| pagination | Dictionary containing the skip, limit, count, and next page parameters.|
+| skip | Sets the number of objects to skip when requesting a list of objects.|
+| limit | Sets the number of objects to retrieve in a single request.|
+| count | The number of languages in the response. |
+| next_page | Contains the next page of results.|
+| api_response | Response object from the request.|
+
+#### **Language attributes:**
+| Attribute | Description |
+| --- | --- | 
+| id | An identifying GUID. |
+| name | The langauge's display name as seen in the Kontent UI.|
+| codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
+| api_response | Response object from the request.|  

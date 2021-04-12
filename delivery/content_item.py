@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 class ContentItem:
     def __init__(self, system:dict, elements:dict, 
-                modular_content = {}, api_response:Response = None):
+                 modular_content = {}, api_response:Response = None):
         self.id = system["id"]
         self.name = system["name"]
         self.codename = system["codename"]
@@ -16,7 +16,8 @@ class ContentItem:
         # components do not have workflow steps
         if "workflow_step" in system:
             self.workflow_step = system["workflow_step"]
-        self.elements = json.loads(json.dumps(elements), object_hook=lambda d: SimpleNamespace(**d))
+        self.elements = json.loads(json.dumps(elements), 
+                                              object_hook=lambda d: SimpleNamespace(**d))
         self.modular_content = modular_content
         self.api_response = api_response
 
