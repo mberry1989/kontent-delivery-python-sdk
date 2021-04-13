@@ -1,9 +1,10 @@
+from delivery.builders.image_builder import ImageBuilder
 import config
 from delivery.client import DeliveryClient
 from samples.custom_link_resolver import CustomLinkResolver
 from delivery.builders.filter_builder import Filter
 
-## MANUAL TESTS
+# MANUAL TESTS
 client = DeliveryClient(config.project_id, options=config.delivery_options)
 client.custom_link_resolver = CustomLinkResolver()
 
@@ -22,7 +23,7 @@ print(r.api_response.url)
 
 ## ITEM
 r2 = client.get_content_item("coffee_processing_techniques")
-# r2 = client.get_content_item("brisbane") # draft item for preview test
+r2 = client.get_content_item("brisbane") # draft item for preview test
 
 # RESULTS
 print(r2.codename)
@@ -35,8 +36,26 @@ for check in r2.elements.checkbox_choices.value: # checkbox - multiple options p
 ### TAXONOMY
 for persona in r2.elements.personas.value:
     print(persona.name)
-### ASSET
+# ASSET
+asset_url = r2.elements.teaser_image.value[0].url
 print(r2.elements.teaser_image.value[0].url)
+
+image = ImageBuilder(asset_url)
+transformed_image = image.transform(
+    image.width(300),
+    image.height(300),
+    image.pixel_ratio(1.5),
+    image.fit_mode("crop"),
+    image.rect(100,100,0.7,0.7),
+    image.focal_point(0.2,0.7,5),
+    image.background_color("7A0099EE"),
+    image.output_format("webp"),
+    image.quality(85),
+    image.lossless(True),
+    image.auto_format_selection(False)
+    )
+print(transformed_image)
+
 ### LINKED_ITEMS
 print(r2.elements.related_articles.value) # codename array
 print(r2.get_linked_items("related_articles")) # array of ContentItems
