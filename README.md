@@ -17,6 +17,7 @@
   - [Getting a taxonomy group](#Getting-a-taxonomy-group)
   - [Getting multiple taxonomies](#Getting-multiple-taxonomies)
 - [Listing languages](#Listing-languages)
+- [Transforming images](#Transforming-images)
 
 
 ## Installation
@@ -396,3 +397,44 @@ for language in response.languages:
 | name | The langauge's display name as seen in the Kontent UI.|
 | codename | A unique identifying codename set in the Kontent UI. **Note:** Special characters are replaced with "_".|
 | api_response | Response object from the request.|  
+
+
+## Transforming images
+When you've obtained the URL for an asset, you can use the Kontent [Image Transformation API](https://docs.kontent.ai/reference/image-transformation) to make on-the-fly modifications to the image.
+
+To use this, create an instance of **ImageBuilder** and pass the desired transformation methods into the bulder's __.transform()__ method. Example:
+
+```python
+# Get content item
+response = client.get_content_item("coffee_processing_techniques")
+
+# Get asset url
+asset_url = response.elements.teaser_image.value[0].url
+
+# Transform image
+image = ImageBuilder(asset_url)
+transformed_image = image.transform(
+    image.width(300),
+    image.height(300),
+    image.pixel_ratio(1.5),
+    )
+
+print(transformed_image)
+# prints: ~/coffee-processing-techniques-1080px.jpg?w=300&h=300&dpr=1.5
+```
+
+| Method | Accepted Values | Example |
+| --- | --- | --- |
+| .width | positive integer, or float between 0 and 1 | ```.width(300)``` |
+| .height | positive integer, or float between 0 and 1 | ```.height(300)``` |
+| .pixel_ratio | float greater than 0 but less than 5 | ```.pixel_ratio(1.5)``` |
+| .fit_mode | string with value "crop", "clip", or "scale" | ```.fit_mode("crop")``` |
+| .rect | 4 integer values representing pixels or floats representing percentages | ```.rect(100,100,0.7,0.7)``` |
+| .focal_point | 2 floats between 0 and 1 and one integer between 1 and 100 | ```.focal_point(0.2,0.7,5)``` |
+| .background_color | string containing 3, 4, 6, or 8 characters | ```.background_color("7A0099EE")``` |
+| .output_format | string with value in [this supported list](https://docs.kontent.ai/reference/image-transformation#a-format-parameter)| ```.output_format("webp")``` |
+| .quality | integer between 1 to 100 | ```.quality(85)``` |
+| .lossless | True, False, 0, or 1 | ```.lossless(True)``` |
+| .auto_format_selection | True, False, 0, or 1 | ```.auto_format_selection(False)``` |
+
+
