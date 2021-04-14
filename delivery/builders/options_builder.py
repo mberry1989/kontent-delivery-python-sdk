@@ -20,7 +20,7 @@ class DeliveryOptionsBuilder():
                         raise Exception("Enabling Secured API requires an API key.") from e
             if "timeout" in value:
                 self.timeout = value["timeout"]
-            if value["retry_attempts"] != None:
+            if "retry_attempts" in value and value["retry_attempts"] != None:
                 try:
                     self.retry_attempts = value["retry_attempts"]
                 except KeyError as e:
