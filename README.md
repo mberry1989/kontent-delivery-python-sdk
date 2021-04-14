@@ -3,6 +3,9 @@
 ## Table of Contents
 - [Installation](#Installation)
 - [Creating a client](#Creating-a-client)
+  -[Setting up config.py](#Setting-up-config.py)
+  -[Delivery options](#Delivery-options)
+  -[Retrying requests](#Retrying-requests)
 - [Requesting items](#Requesting-items)
   - [Getting a single item](#Getting-a-single-item)
   - [Getting multiple items](#Getting-multiple-items)
@@ -65,9 +68,30 @@ client = DeliveryClient(config.project_id, options=config.delivery_options)
 | secured | bool | Determines whether client will use [Kontent's Secure access API](https://docs.kontent.ai/reference/delivery-api#tag/Secure-access) |
 | secured_api_key | string | Project Secure access API key  |
 | timeout | set | Determines (in seconds) the _read_ and _connect_ timeout threshold for the [Python "Requests" library](https://2.python-requests.org/en/master/user/advanced/#timeouts)
+| retry_attempts | int | Determines the number of times the SDK will [Retry](#) the request |
 
 **Note:** Preview and Secured API cannot be enabled simultaneously. 
 
+### Retrying requests
+By default, the SDK uses a retry policy, asking for requested content again in case of an error. The default policy retries the HTTP request if the following status codes are returned:
+
+ - 408 - RequestTimeout
+ - 429 - TooManyRequests
+ - 500 - InternalServerError
+ - 502 - BadGateway
+ - 503 - ServiceUnavailable
+ - 504 - GatewayTimeout
+The SDK will perform a total of 6 attempts at a maximum of 32 seconds to retrieve content before returning a max retry error. The consecutive attempts are delayed with exponential backoff.
+
+To disable the retry policy or set a custom number of attempts, you can set  __retry_attempts__ in the config file:
+
+```json
+project_id ="your_project_id"
+delivery_options = {   
+    "retry_attempts": 0
+    }
+
+```
 
 ## Requesting items
 
