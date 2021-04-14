@@ -23,7 +23,9 @@ class FilterBuilder:
                 if position == 0:
                     separator = "?"
                 else:
-                    separator = "&"            
+                    separator = "&"
+                if type(filter.value) == list:
+                    filter.value = ','.join(map(str, filter.value))           
                 operation = f"{filter.operation}="
                 url_segment = f"{separator}{filter.api_property}{operation}{filter.value}"
             else:

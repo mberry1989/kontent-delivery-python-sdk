@@ -159,14 +159,18 @@ Filter("", "depth", 6)
 | [in] |Property value is in the specified list of values.|```Filter("elements.country", "[in]", "Kenya,Brazil,Argentina"``` |
 | [nin] |Property value is not in the specified list of values.|```Filter("elements.country", "[nin]", "France")``` |
 | [contains] |Property with an array of values contains the specified value.|```Filter("elements.product_status", "[contains]", "bestseller")``` |
-| [any] |Property with an array of values contains at least one value from the specified list of values.|```Filter("elements.processing", "[any]", "wet__washed_,semi_dry")``` |
-| [all] |Property with an array of values contains all of the specified values.|```Filter("elements.sitemap", "[all]", "coffee,products")``` |  
+| [any] |Property with an array of values contains at least one value from the specified list of values.|```Filter("elements.processing", "[any]", ["wet__washed_","semi_dry"])``` |
+| [all] |Property with an array of values contains all of the specified values.|```Filter("elements.sitemap", "[all]", ["coffee","products"])``` |  
   
 #### **Parameters and Projection:**
 | Operator | Description | Example |
 | --- | --- | --- |
 | depth |Content items can reference other content items using linked items or rich text elements. These linked items can reference other items recursively. By default, the API returns only one level of linked items.|```Filter("", "depth", 6) ``` |
-| elements | When getting content items or content types, you can specify which elements to return by using the elements query parameter. | ```Filter("","elements","product_name")``` |
+| elements | When getting content items or content types, you can specify which elements to return by using the elements query parameter. | ```Filter("","elements",["name",product_name"])``` |
+| skip | Sets the number of objects to skip when requesting a list of objects. The skip parameter must be combined with the limit parameter to work.  | ```Filter("", "skip", 2) ``` |
+| limit | Sets the number of objects to retrieve in a single request. | ```Filter("", "limit", 10) ``` |
+| language | Determines which language variant of content items to return. | ```Filter("", "language", "en-US") ``` |
+| order | Determines the order of the retrieved objects. Use [asc] for ascending and [desc] for descending orders. | ```Filter("", "order","codename[desc]") ``` |
 
 **Multiple filters and parameters can be passed into a single call:**
 ```python
@@ -174,7 +178,7 @@ response = client.get_content_items(
     Filter("system.type", "[eq]", "coffee"),
     Filter("elements.product_name", "[neq]", "Folgers"),
     Filter("price", "[lte]", "10.5"),
-    Filter("elements.country", "[in]", "Kenya,Brazil,Argentina"),
+    Filter("elements.country", "[in]", ["Kenya","Brazil","Argentina"]),
     Filter("","depth", 6),
     Filter("","elements","product_name")
 )
