@@ -11,7 +11,7 @@ class TaxonomyGroup:
         self.codename = system["codename"]
         self.last_modified = system["last_modified"]
         self.terms = json.loads(json.dumps(terms), 
-                                              object_hook=lambda d: SimpleNamespace(**d))
+                                object_hook=lambda d: SimpleNamespace(**d))
         self.api_response = api_response
 
 
