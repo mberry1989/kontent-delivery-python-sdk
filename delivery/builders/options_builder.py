@@ -1,6 +1,6 @@
 class DeliveryOptionsBuilder():
     def __init__(self):
-        super().__init__()
+        pass
 
     def build_client_options(self, options):
         for key, value in options.items():

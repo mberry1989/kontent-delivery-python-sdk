@@ -14,7 +14,7 @@ filters = [
     Filter("", "depth", 6)
 ]
 
-query_string = FilterBuilder(filters).return_url
+query_string = FilterBuilder().build_return_url(filters)
 
 client =  DeliveryClient("test_project_id")
 

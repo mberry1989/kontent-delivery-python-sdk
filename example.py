@@ -1,15 +1,17 @@
-from delivery.builders.image_builder import ImageBuilder
 import config
 from delivery.client import DeliveryClient
+from samples.custom_item_resolver import CustomItemResolver
 from samples.custom_link_resolver import CustomLinkResolver
 from delivery.builders.filter_builder import Filter
+from delivery.builders.image_builder import ImageBuilder
 
 # MANUAL TESTS
 client = DeliveryClient(config.project_id, options=config.delivery_options)
 client.custom_link_resolver = CustomLinkResolver()
+client.custom_item_resolver = CustomItemResolver()
 
 
-## ITEMS
+# ITEMS
 r = client.get_content_items(
     Filter("system.type", "[eq]", "coffee"),
     Filter("elements.price", "[range]", "10.5,50"),
@@ -21,7 +23,7 @@ for item in r.items: # array of ContentItems
 print(r.api_response.url)
 
 
-## ITEM
+# ITEM
 r2 = client.get_content_item("coffee_processing_techniques")
 r2 = client.get_content_item("brisbane") # draft item for preview test
 
@@ -36,7 +38,7 @@ for check in r2.elements.checkbox_choices.value: # checkbox - multiple options p
 ### TAXONOMY
 for persona in r2.elements.personas.value:
     print(persona.name)
-# ASSET
+### ASSET
 asset_url = r2.elements.teaser_image.value[0].url
 print(r2.elements.teaser_image.value[0].url)
 
