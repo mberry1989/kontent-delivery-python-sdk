@@ -65,3 +65,15 @@ for item in r2.get_linked_items("related_articles"): # getting the item values
     print(f"name: {item.name} summary: {item.elements.summary.value}") 
 ## RICH TEXT VALUES
 print(r2.elements.body_copy.value)
+
+### ITEMS FEED
+r = client.get_content_items_feed()
+
+items = r.feed.items
+
+while r.next:
+    next_result = r.get_next()
+    items.extend(next_result.items)
+
+for item in items:
+    print(item.name)

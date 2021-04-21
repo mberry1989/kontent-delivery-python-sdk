@@ -38,10 +38,30 @@ class ContentItemListing:
                     modular_content:dict, api_response:Response):
         self.items = content_items
         self.pagination = pagination
-        self.skip = pagination["skip"]
-        self.limit = pagination["limit"]
-        self.count = pagination["count"]
-        self.next_page = pagination["next_page"]
+        if pagination:
+            self.skip = pagination["skip"]
+            self.limit = pagination["limit"]
+            self.count = pagination["count"]
+            self.next_page = pagination["next_page"]
         self.modular_content = modular_content
         self.api_response = api_response
+
+class ContentItemsFeed:
+    def __init__(self, delivery_client, items:ContentItemListing, url):
+        self.feed = items
+        self.url = url
+        self.delivery_client = delivery_client
+        self.next = None
+
+    def get_next(self):
+        if self.next != None:
+            response = self.delivery_client.request_manager.get_request(self.delivery_client, self.url, self.next)
+            if response.ok:
+                next_results = self.delivery_client.content_builder.build_content_item_listing(self.delivery_client, response)
+            if "x-continuation" in next_results.api_response.headers.keys():
+                self.next = { "x-continuation" : next_results.api_response.headers["x-continuation"] }
+            else:
+                self.next = None
+            
+            return next_results
 
