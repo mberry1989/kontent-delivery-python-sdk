@@ -5,32 +5,24 @@ class Filter:
         self.value = value
 
 class FilterBuilder:
-    def __init__(self, filters):
-        self.filters = filters
-        self.return_url = None
+    def __init__(self):
+        pass
 
-    @property
-    def return_url(self):
-        return self._return_url
-
-    @return_url.setter
-    def return_url(self, value):
+    def build_return_url(self, filters):
         query_string = []
 
-        for filter in self.filters:
+        for filter in filters:
             if isinstance(filter, Filter):
-                position = self.filters.index(filter)
+                position = filters.index(filter)
+                separator = "&"
                 if position == 0:
-                    separator = "?"
-                else:
-                    separator = "&"
+                    separator = "?"                
                 if type(filter.value) == list:
                     filter.value = ','.join(map(str, filter.value))           
-                operation = f"{filter.operation}="
-                url_segment = f"{separator}{filter.api_property}{operation}{filter.value}"
+                url_segment = f"{separator}{filter.api_property}{filter.operation}={filter.value}"
             else:
                 raise TypeError("Filters must be of type 'Filter'")
             query_string.append(url_segment)
 
-        self._return_url = "".join(query_string)
+        return "".join(query_string)
         

@@ -27,8 +27,6 @@ class RequestManager:
 
         if hasattr(client.client_options, "retry_attempts"):
             retry_strategy.total=client.client_options.retry_attempts
-
-        print(retry_strategy.total)
             
         adapter = HTTPAdapter(max_retries=retry_strategy)
         session = requests.Session()
