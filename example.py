@@ -15,7 +15,7 @@ client.custom_item_resolver = CustomItemResolver()
 r = client.get_content_items(
     Filter("system.type", "[eq]", "coffee"),
     Filter("elements.price", "[range]", "10.5,50"),
-    Filter("","depth", 6)
+    Filter("", "depth", 6)
 )
 # RESULTS
 for item in r.items: # array of ContentItems
@@ -23,9 +23,9 @@ for item in r.items: # array of ContentItems
 print(r.api_response.url)
 
 
-# ITEM
+# # ITEM
 r2 = client.get_content_item("coffee_processing_techniques")
-r2 = client.get_content_item("brisbane") # draft item for preview test
+# r2 = client.get_content_item("brisbane") # draft item for preview test
 
 # RESULTS
 print(r2.codename)

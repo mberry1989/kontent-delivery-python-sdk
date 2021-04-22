@@ -4,6 +4,7 @@ class Filter:
         self.operation = operation
         self.value = value
 
+
 class FilterBuilder:
     def __init__(self):
         pass
@@ -16,13 +17,12 @@ class FilterBuilder:
                 position = filters.index(filter)
                 separator = "&"
                 if position == 0:
-                    separator = "?"                
+                    separator = "?"
                 if type(filter.value) == list:
-                    filter.value = ','.join(map(str, filter.value))           
+                    filter.value = ','.join(map(str, filter.value))
                 url_segment = f"{separator}{filter.api_property}{filter.operation}={filter.value}"
             else:
                 raise TypeError("Filters must be of type 'Filter'")
             query_string.append(url_segment)
 
         return "".join(query_string)
-        

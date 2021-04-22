@@ -12,4 +12,3 @@ class UrlBuilder:
         url = f"{PROTOCOL}{domain}{client.project_id}{endpoint}{query_string}"
 
         return url
-        
