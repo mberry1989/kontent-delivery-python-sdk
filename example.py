@@ -69,11 +69,9 @@ print(r2.elements.body_copy.value)
 ### ITEMS FEED
 r = client.get_content_items_feed()
 
-items = r.feed.items
-
 while r.next:
     next_result = r.get_next()
-    items.extend(next_result.items)
+    r.feed.items.extend(next_result.items)
 
-for item in items:
+for item in r.feed.items:
     print(item.name)
