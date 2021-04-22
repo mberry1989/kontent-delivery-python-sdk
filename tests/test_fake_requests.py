@@ -40,6 +40,10 @@ def taxonomy_path():
 def languages_path():
     return "tests/fixtures/languages.json"
 
+@pytest.fixture
+def feed_1_path():
+    return "tests/fixtures/items_feed_1.json"
+
 
 # RESPONSES
 @pytest.fixture
@@ -96,12 +100,21 @@ def mock_languages_response(monkeypatch, languages_path):
         return MockResponse(languages_path)
     monkeypatch.setattr(RequestManager, 'get_request', mock_get)
 
+@pytest.fixture
+def mock_feed_response(monkeypatch, feed_1_path):
+    def mock_get(*args):
+        response = MockResponse(feed_1_path)
+        response.headers = {"x-continuation":"test"}
+        return response
+    monkeypatch.setattr(RequestManager, 'get_request', mock_get)
+
 
 # MOCK
 class MockResponse:
     def __init__(self, path):
         self.ok = True
         self.path = path
+        self.headers = None
 
     def json(self):
         with open(self.path) as f:
@@ -219,3 +232,20 @@ def test_get_taxonomies(delivery_client, mock_taxonomies_response):
 def test_languages(delivery_client, mock_languages_response):
     r = delivery_client.get_languages()
     assert len(r.languages) > 0
+
+## ITEMS FEED
+@pytest.mark.usefixtures("delivery_client")
+def test_feed(delivery_client, mock_feed_response):
+    r = delivery_client.get_content_items_feed(
+        Filter("system.codename", "[eq]", "on_roasts")
+    )
+
+    items = r.feed.items
+    feed_1_token = r.next
+    next_result = r.get_next()
+
+    print(r.url)
+
+    assert len(items) > 0
+    assert feed_1_token != None
+    assert next_result != None

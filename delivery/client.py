@@ -80,3 +80,18 @@ class DeliveryClient:
         if response.ok:
             language_listing = self.content_builder.build_language_listing(response)
             return language_listing
+
+
+    def get_content_items_feed(self, *filters:Filter):
+        endpoint = "/items-feed"
+        if filters:
+            query_string = self.filter_builder.build_return_url(filters)
+            url = self.url_builder.build_url(self, endpoint, query_string)
+        else:
+            url = self.url_builder.build_url(self, endpoint)
+        response = self.request_manager.get_request(self, url)
+        if response.ok:
+            content_items_feed = self.content_builder.build_items_feed(self, response, url)
+            return content_items_feed
+        
+        return response.status_code

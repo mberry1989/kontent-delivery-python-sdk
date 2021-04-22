@@ -13,6 +13,7 @@
 - [Rich Text Resolution](#Rich-text-resolution)
   - [Resolving inline links](#Resolving-inline-links)
   - [Resolving inline items and components](#Resolving-inline-items-and-components)
+- [Enumerating all items](#Enumerating-all-items)
 - [Requesting content types](#Requesting-content-types)
   - [Getting a content type](#Getting-a-content-type)
   - [Getting multiple content types](#Getting-multiple-content-types)
@@ -81,6 +82,7 @@ By default, the SDK uses a retry policy, asking for requested content again in c
  - 502 - BadGateway
  - 503 - ServiceUnavailable
  - 504 - GatewayTimeout
+
 The SDK will perform a total of 6 attempts at a maximum of 32 seconds to retrieve content before returning a max retry error. The consecutive attempts are delayed with exponential backoff.
 
 To disable the retry policy or set a custom number of attempts, you can set  __retry_attempts__ in the config file:
@@ -141,7 +143,7 @@ for item in response.items:
     # AeroPress Filters
     # ...
 ```
-Using the DeliveryClient's __get_content_items__ method will produce a **ContentItemListing** object that stores each retrieved item as a **ContentItem** in an "items" attribute.  
+Using the DeliveryClient's __get_content_items__ method will produce a **ContentItemListing** object that stores each retrieved item as a [**ContentItem**](#ContentItem-attributes) in an "items" attribute.  
 #### **ContentItemListing attributes:**
 | Attribute | Description |
 | --- | --- |
@@ -277,6 +279,47 @@ from samples.custom_item_resolver import CustomItemResolver
 client = DeliveryClient(config.project_id, options=config.delivery_options)
 client.custom_item_resolver = CustomItemResolver()
 
+```
+## Enumerating all items
+When enumerating all items in the specified project, or if exceeding the item response limit on the Delivery API's  __items__ endpoint is necessary, the [__items-feed__](https://docs.kontent.ai/reference/delivery-api#operation/enumerate-content-items) endpoint can be used. 
+
+Getting an item feed from Kontent can be accomplished by using the DeliveryClient's __get_content_items_feed__ method:
+
+```python
+r = client.get_content_items_feed()
+
+while r.next:
+    next_result = r.get_next()
+    r.feed.items.extend(next_result.items)
+
+for item in r.feed.items:
+    print(item.name)
+    # prints:
+    # Example Item Name 001
+    # Example Item Name 002
+    # ...
+    # Example Item Name 4300
+    # etc.
+```
+
+Using the DeliveryClient's __get_content_items_feed__ method will produce a **ContentItemsFeed** object that stores  [**ContentItemListing**](#ContentItemListing-attributes) objects in a "feed" attribute. Paginated results can be retrieved by using the __get_next__ method, which returns a **ContentItemListing** object.
+
+#### **ContentItemFeed attributes:**
+| Attribute | Description |
+| --- | --- |
+| feed | Contains ContentItemListing objects from the first page of the response, and can be extended using the ```get_next()``` method|
+| url |  Contains the requested url.|
+| next | Stores the "x-continuation" header for retrieving the next page of results. Set to ```None``` when no more pages are available. |  
+
+[**Filtering**](#Filtering-content) can also be used when getting content item feeds:
+
+```python
+r = client.get_content_items_feed(
+    Filter("system.codename", "[eq]", "test999")
+)
+
+print(r.url)
+# prints: ~/items-feed?system.codename[eq]=on_roasts
 ```
 
 ## Requesting content types
@@ -463,6 +506,6 @@ print(transformed_image)
 | .output_format | string with value in [this supported list](https://docs.kontent.ai/reference/image-transformation#a-format-parameter)| ```.output_format("webp")``` |
 | .quality | integer between 1 to 100 | ```.quality(85)``` |
 | .lossless | True, False, 0, or 1 | ```.lossless(True)``` |
-| .auto_format_selection | True, False, 0, or 1 | ```.auto_format_selection(False)``` |
+| .auto_format_selection | True, False, 0, or 1 | ```.auto_format_selection(False)``` |  
 
 

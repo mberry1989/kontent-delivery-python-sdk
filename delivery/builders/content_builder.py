@@ -1,4 +1,4 @@
-from delivery.content_item import ContentItem, ContentItemListing
+from delivery.content_item import ContentItem, ContentItemListing, ContentItemsFeed
 from delivery.resolvers.content_link_resolver import ContentLinkResolver
 from delivery.resolvers.inline_item_resolver import InlineItemResolver
 from delivery.content_type import ContentType, ContentTypeListing
@@ -28,7 +28,10 @@ class ContentBuilder:
     def build_content_item_listing(self, delivery_client, response):
         json = response.json()
         items = [self.build_content_item(delivery_client, response, item) for item in json["items"]]
-        content_item_listing = ContentItemListing(items, json["pagination"], json["modular_content"], response)          
+        pagination = None
+        if "pagination" in json.keys():
+            pagination = json["pagination"]
+        content_item_listing = ContentItemListing(items, pagination, json["modular_content"], response)          
         return content_item_listing
 
 
@@ -72,4 +75,15 @@ class ContentBuilder:
         languages = [self.build_language(response, language) for language in json["languages"]]
         language_listing = LanguageListing(languages, json["pagination"], response)
         return language_listing
+
+    def build_items_feed(self, delivery_client, response, url):
+        content_item_listing = self.build_content_item_listing(delivery_client, response)
+        headers = content_item_listing.api_response.headers
+        content_items_feed = ContentItemsFeed(delivery_client, content_item_listing, url)
+
+        if "x-continuation" in headers:
+            content_items_feed.next = { "x-continuation":headers["x-continuation"] }
+
+        return content_items_feed
+
     
