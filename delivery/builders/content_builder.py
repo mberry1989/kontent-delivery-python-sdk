@@ -81,7 +81,7 @@ class ContentBuilder:
         headers = content_item_listing.api_response.headers
         content_items_feed = ContentItemsFeed(delivery_client, content_item_listing, url)
 
-        if headers["x-continuation"]:
+        if "x-continuation" in headers:
             content_items_feed.next = { "x-continuation":headers["x-continuation"] }
 
         return content_items_feed
