@@ -1,6 +1,6 @@
 # Kentico Kontent Python SDK
 
-![Build & Test](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/blob/main/.github/workflows/python-package.yml/badge.svg)
+![Build & Test](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/actions/workflows/python-package.yml/badge.svg)
 
 ## Table of Contents
 - [Installation](#Installation)
