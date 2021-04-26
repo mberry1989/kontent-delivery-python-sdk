@@ -9,9 +9,11 @@ from samples.custom_item_resolver import CustomItemResolver
 def delivery_client():
     return DeliveryClient(test_config.project_id)
 
+
 @pytest.fixture(scope="module")
 def delivery_client_with_options():
     return DeliveryClient(test_config.project_id, options=test_config.delivery_options)
+
 
 @pytest.fixture(scope="module")
 def delivery_client_with_resolvers():
