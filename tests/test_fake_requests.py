@@ -142,7 +142,8 @@ class MockResponse:
 
 # TESTS
 
-## ITEMS
+
+# ITEMS
 @pytest.mark.usefixtures("delivery_client")
 def test_get_items_without_filters(delivery_client, mock_items_response):
     r = delivery_client.get_content_items()
@@ -197,7 +198,8 @@ def test_get_linked_items_depth(delivery_client, mock_articles_response):
     assert a.codename == "origins_of_arabica_bourbon"
     assert d.codename == "donate_with_us"
 
-### PREVIEW
+
+# PREVIEW
 @pytest.mark.usefixtures("delivery_client_with_options")
 def test_get_preview_items(delivery_client_with_options, mock_articles_response):
     delivery_client_with_options.client_options.preview = True
@@ -206,7 +208,8 @@ def test_get_preview_items(delivery_client_with_options, mock_articles_response)
 
     assert c.codename == "coffee_processing_techniques"
 
-### SECURED
+
+# SECURED
 @pytest.mark.usefixtures("delivery_client_with_options")
 def test_get_secured_items(delivery_client_with_options, mock_articles_response):
     delivery_client_with_options.client_options.secured = True
@@ -214,7 +217,9 @@ def test_get_secured_items(delivery_client_with_options, mock_articles_response)
     c = r.items[1]
 
     assert c.codename == "coffee_processing_techniques"
-## TYPES
+
+
+# TYPES
 @pytest.mark.usefixtures("delivery_client")
 def test_get_article_type(delivery_client, mock_article_type_response):
     r = delivery_client.get_content_type("article")
@@ -222,6 +227,7 @@ def test_get_article_type(delivery_client, mock_article_type_response):
     assert r.elements.title.name == "Title"
     assert r.elements.title.type == "text"
     assert r.elements.checkbox_choices.options[0].codename == "one"
+
 
 @pytest.mark.usefixtures("delivery_client")
 def test_get_types(delivery_client, mock_types_response):
@@ -232,12 +238,14 @@ def test_get_types(delivery_client, mock_types_response):
     assert first_type.elements.facts.name == "Facts"
     assert first_type.elements.facts.type == "modular_content"
 
-## TAXONOMIES
+
+# TAXONOMIES
 @pytest.mark.usefixtures("delivery_client")
 def test_taxonomy(delivery_client, mock_taxonomy_response):
     r = delivery_client.get_taxonomy("personas")
     assert r.codename
     assert len(r.terms) > 0
+
 
 @pytest.mark.usefixtures("delivery_client")
 def test_get_taxonomies(delivery_client, mock_taxonomies_response):
@@ -245,13 +253,15 @@ def test_get_taxonomies(delivery_client, mock_taxonomies_response):
     assert r.count > 0
     assert len(r.taxonomy_groups) > 0
 
-## LANGUAGES
+
+# LANGUAGES
 @pytest.mark.usefixtures("delivery_client")
 def test_languages(delivery_client, mock_languages_response):
     r = delivery_client.get_languages()
     assert len(r.languages) > 0
 
-## ITEMS FEED
+
+# ITEMS FEED
 @pytest.mark.usefixtures("delivery_client")
 def test_feed(delivery_client, mock_feed_response):
     r = delivery_client.get_content_items_feed(

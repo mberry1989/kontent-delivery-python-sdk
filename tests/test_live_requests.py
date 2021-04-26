@@ -1,9 +1,6 @@
 from delivery.builders.filter_builder import Filter
 import pytest
 
-import config
-from delivery.client import DeliveryClient
-
 reason = "avoid calling live API in automated tests."
 
 
@@ -80,23 +77,21 @@ def test_get_languages_pass(delivery_client):
     assert r.api_response.ok is True
     assert len(r.languages) > 0
 
-
-@pytest.mark.skip(reason)
-def test_performance():
-    # delivery_client = DeliveryClient(config.project_id,
-    # options=config.delivery_options)
-    delivery_client = DeliveryClient(config.project_id)
-    a = delivery_client.get_languages()
-    b = delivery_client.get_content_items()
-    c = delivery_client.get_content_item("on_roasts")
-    d = delivery_client.get_content_items(
-        Filter("system.type", "[eq]", "coffee"),
-        Filter("elements.price", "[range]", "10.5,50"),
-        Filter("", "depth", 6),
-        Filter("", "order", "system.name[desc]"),
-        Filter("elements.price", "[neq]", "blah")
-    )
-    e = delivery_client.get_content_type("article")
-    f = delivery_client.get_content_types()
-    g = delivery_client.get_taxonomies()
-    h = delivery_client.get_taxonomy("personas")
+# commented to avoid Lint
+# @pytest.mark.skip(reason)
+# def test_performance():
+#     delivery_client = DeliveryClient(config.project_id)
+#     a = delivery_client.get_languages()
+#     b = delivery_client.get_content_items()
+#     c = delivery_client.get_content_item("on_roasts")
+#     d = delivery_client.get_content_items(
+#         Filter("system.type", "[eq]", "coffee"),
+#         Filter("elements.price", "[range]", "10.5,50"),
+#         Filter("", "depth", 6),
+#         Filter("", "order", "system.name[desc]"),
+#         Filter("elements.price", "[neq]", "blah")
+#     )
+#     e = delivery_client.get_content_type("article")
+#     f = delivery_client.get_content_types()
+#     g = delivery_client.get_taxonomies()
+#     h = delivery_client.get_taxonomy("personas")
