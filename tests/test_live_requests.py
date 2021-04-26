@@ -83,7 +83,8 @@ def test_get_languages_pass(delivery_client):
 
 @pytest.mark.skip(reason)
 def test_performance():
-    # delivery_client = DeliveryClient(config.project_id, options=config.delivery_options)
+    # delivery_client = DeliveryClient(config.project_id,
+    # options=config.delivery_options)
     delivery_client = DeliveryClient(config.project_id)
     a = delivery_client.get_languages()
     b = delivery_client.get_content_items()
