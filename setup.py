@@ -9,7 +9,7 @@ If you find a bug in the SDK or have a feature request, please submit a GitHub i
 
 setup(
         name="kontent_delivery",
-        version="0.1.0",
+        version="0.1.1",
         author="Michael Berry",
         description=DESCRIPTION,
         long_description=LONGDESCRIPTION,
@@ -56,7 +56,7 @@ setup(
             "toml>=0.10.2",
             "tqdm>=4.60.0",
             "twine>=3.4.1",
-            "urllib3>=1.26.3",
+            "urllib3>=1.26.4",
             "webencodings>=0.5.1",
             "wrapt>=1.12.1",
             "zipp>=3.4.1",
