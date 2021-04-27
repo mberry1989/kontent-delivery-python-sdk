@@ -1,5 +1,5 @@
-from delivery.builders.options_builder import DeliveryOptionsBuilder
-from delivery.client import DeliveryClient
+from kontent_delivery.builders.options_builder import DeliveryOptionsBuilder
+from kontent_delivery.client import DeliveryClient
 import pytest
 
 client = DeliveryClient("test_project_id")

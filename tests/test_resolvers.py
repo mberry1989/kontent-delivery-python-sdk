@@ -1,8 +1,8 @@
-from delivery.content_item import ContentItem
+from kontent_delivery.content_item import ContentItem
 import json
 import pytest
-from delivery.resolvers.content_link_resolver import ContentLinkResolver
-from delivery.resolvers.inline_item_resolver import InlineItemResolver
+from kontent_delivery.resolvers.content_link_resolver import ContentLinkResolver
+from kontent_delivery.resolvers.inline_item_resolver import InlineItemResolver
 
 
 @pytest.fixture

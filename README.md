@@ -1,6 +1,9 @@
+![Build & Test](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/actions/workflows/python-package.yml/badge.svg)
+![PyPI version](https://badge.fury.io/py/kontent-delivery.svg)](https://badge.fury.io/py/kontent-delivery)
 # Kentico Kontent Python SDK
 
-![Build & Test](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/actions/workflows/python-package.yml/badge.svg)
+The Delivery Python SDK can be used in Python projects to retrieve content from the Kentico Kontent headless CMS. This is a community project and not an official Kentico SDK. 
+If you find a bug in the SDK or have a feature request, please submit a GitHub issue.
 
 ## Table of Contents
 - [Installation](#Installation)
@@ -29,15 +32,15 @@
 ## Installation
 To install the SDK from the Python Package Index use:  
 
-``` pip install kontent-delivery-python-sdk ```
+``` pip install kontent_delivery ```
 
 ## Creating a client
 To obtain content from Kentico Kontent, you will create an instance of DeliveryClient and pass it your Project ID:
 
 ```python
-from delivery.client import DeliveryClient
+from kontent_delivery.client import DeliveryClient
 
-client = DeliveryClient("7a11a58d-cd21-002c-cd34-30196c7a1103")
+client = DeliveryClient("your_project_id")
 ```
 
 ### Setting up config.py
@@ -58,7 +61,7 @@ delivery_options = {
 Which can be imported and used to build your DelieryClient:
 ```python
 import config
-from delivery.client import DeliveryClient
+from kontent_delivery.client import DeliveryClient
 
 client = DeliveryClient(config.project_id, options=config.delivery_options)
 ```
@@ -240,7 +243,7 @@ The _link_ argument passed into **resolve_link()** allows you to access the link
 
 Once a custom link resolver is implemented, import it and register to your DeliveryClient:
 ```python
-from delivery.client import DeliveryClient
+from kontent_delivery.client import DeliveryClient
 # namespace for your custom resolver will vary
 from samples.custom_link_resolver import CustomLinkResolver
 
@@ -274,7 +277,7 @@ The _linked_item_ argument passed into **resolve_item()** is a [ContentItem](#Co
 
 Once a custom link resolver is implemented, import it and register to your DeliveryClient:  
 ```python
-from delivery.client import DeliveryClient
+from kontent_delivery.client import DeliveryClient
 # namespace for your custom resolver will vary
 from samples.custom_item_resolver import CustomItemResolver
 

@@ -1,8 +1,8 @@
-from delivery.builders.content_builder import ContentBuilder
-from delivery.builders.filter_builder import Filter, FilterBuilder
-from delivery.builders.options_builder import DeliveryOptionsBuilder
-from delivery.builders.url_builder import UrlBuilder
-from delivery.request_manager import RequestManager
+from kontent_delivery.builders.content_builder import ContentBuilder
+from kontent_delivery.builders.filter_builder import Filter, FilterBuilder
+from kontent_delivery.builders.options_builder import DeliveryOptionsBuilder
+from kontent_delivery.builders.url_builder import UrlBuilder
+from kontent_delivery.request_manager import RequestManager
 
 
 class DeliveryClient:

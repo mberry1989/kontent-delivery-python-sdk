@@ -1,9 +1,9 @@
-from delivery.content_item import ContentItem, ContentItemListing, ContentItemsFeed
-from delivery.resolvers.content_link_resolver import ContentLinkResolver
-from delivery.resolvers.inline_item_resolver import InlineItemResolver
-from delivery.content_type import ContentType, ContentTypeListing
-from delivery.taxonomy_group import TaxonomyGroup, TaxonomyGroupListing
-from delivery.language import Language, LanguageListing
+from kontent_delivery.content_item import ContentItem, ContentItemListing, ContentItemsFeed
+from kontent_delivery.resolvers.content_link_resolver import ContentLinkResolver
+from kontent_delivery.resolvers.inline_item_resolver import InlineItemResolver
+from kontent_delivery.content_type import ContentType, ContentTypeListing
+from kontent_delivery.taxonomy_group import TaxonomyGroup, TaxonomyGroupListing
+from kontent_delivery.language import Language, LanguageListing
 
 
 class ContentBuilder:

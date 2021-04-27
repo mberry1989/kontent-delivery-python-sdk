@@ -1,4 +1,4 @@
-from delivery.builders.filter_builder import Filter
+from kontent_delivery.builders.filter_builder import Filter
 import pytest
 
 reason = "avoid calling live API in automated tests."
