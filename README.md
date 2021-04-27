@@ -1,6 +1,6 @@
-# Kentico Kontent Python SDK
-
 ![Build & Test](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/actions/workflows/python-package.yml/badge.svg)
+![PyPI version](https://badge.fury.io/py/kontent-delivery.svg)](https://badge.fury.io/py/kontent-delivery)
+# Kentico Kontent Python SDK
 
 The Delivery Python SDK can be used in Python projects to retrieve content from the Kentico Kontent headless CMS. This is a community project and not an official Kentico SDK. 
 If you find a bug in the SDK or have a feature request, please submit a GitHub issue.
