@@ -9,7 +9,7 @@ If you find a bug in the SDK or have a feature request, please submit a GitHub i
 
 setup(
         name="kontent_delivery",
-        version="0.0.4",
+        version="0.1.0",
         author="Michael Berry",
         description=DESCRIPTION,
         long_description=LONGDESCRIPTION,
@@ -77,7 +77,7 @@ setup(
             "Kentico Delivery SDK",
             ],
         classifiers=[
-            "Development Status :: 2 - Pre-Alpha",
+            "Development Status :: 3 - Alpha",
             "Intended Audience :: Developers",
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: MIT License",
