@@ -8,9 +8,9 @@ If you find a bug in the SDK or have a feature request, please submit a GitHub i
 ## Table of Contents
 - [Installation](#Installation)
 - [Creating a client](#Creating-a-client)
-  -[Setting up config.py](#Setting-up-config.py)
-  -[Delivery options](#Delivery-options)
-  -[Retrying requests](#Retrying-requests)
+  - [Setting up config.py](#Setting-up-config.py)
+  - [Delivery options](#Delivery-options)
+  - [Retrying requests](#Retrying-requests)
 - [Requesting items](#Requesting-items)
   - [Getting a single item](#Getting-a-single-item)
   - [Getting multiple items](#Getting-multiple-items)
