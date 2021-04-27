@@ -1,4 +1,4 @@
-from delivery.content_item import ContentItem
+from kontent_delivery.content_item import ContentItem
 from bs4 import BeautifulSoup
 
 

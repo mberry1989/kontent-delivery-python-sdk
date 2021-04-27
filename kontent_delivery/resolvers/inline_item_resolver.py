@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from delivery.content_item import ContentItem
+from kontent_delivery.content_item import ContentItem
 
 
 class InlineItemResolver:

@@ -1,9 +1,9 @@
 import config
-from delivery.client import DeliveryClient
+from kontent_delivery.client import DeliveryClient
 from samples.custom_item_resolver import CustomItemResolver
 from samples.custom_link_resolver import CustomLinkResolver
-from delivery.builders.filter_builder import Filter
-from delivery.builders.image_builder import ImageBuilder
+from kontent_delivery.builders.filter_builder import Filter
+from kontent_delivery.builders.image_builder import ImageBuilder
 
 # MANUAL TESTS
 client = DeliveryClient(config.project_id, options=config.delivery_options)

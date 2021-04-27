@@ -1,7 +1,7 @@
 import pytest
-from delivery.client import DeliveryClient
-from delivery.builders.filter_builder import Filter, FilterBuilder
-from delivery.builders.url_builder import UrlBuilder
+from kontent_delivery.client import DeliveryClient
+from kontent_delivery.builders.filter_builder import Filter, FilterBuilder
+from kontent_delivery.builders.url_builder import UrlBuilder
 
 PROTOCOL = "https://"
 DELIVERY_DOMAIN = "deliver.kontent.ai/"

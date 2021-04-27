@@ -1,6 +1,6 @@
 import pytest
 import tests.conftest_keys as test_config
-from delivery.client import DeliveryClient
+from kontent_delivery.client import DeliveryClient
 from samples.custom_link_resolver import CustomLinkResolver
 from samples.custom_item_resolver import CustomItemResolver
 

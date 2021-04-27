@@ -1,7 +1,7 @@
 import json
 import pytest
-from delivery.request_manager import RequestManager
-from delivery.builders.filter_builder import Filter
+from kontent_delivery.request_manager import RequestManager
+from kontent_delivery.builders.filter_builder import Filter
 
 
 # PATHS
