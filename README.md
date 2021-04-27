@@ -162,9 +162,11 @@ Using the DeliveryClient's __get_content_items__ method will produce a **Content
 | api_response | Response object from the request.|
 
 ### Filtering content
-Filtering can be used when getting multiple items. Filters use an "element", "operation", "value" pattern such as the following filter to get any items with the title "On Roasts":
+Filtering can be used when getting multiple items. Filters use an **"element"**, **"operation"**, **"value"** pattern. For example, the following filter gets any items with the title "On Roasts":
 
 ```python
+from kontent_delivery.builders.filter_builder import Filter
+
 response = client.get_content_items(
     Filter("elements.title", "[eq]", "On Roasts")
 )
@@ -221,6 +223,8 @@ Rich Text Elements in Kontent can contain inline references to other content ite
 3. Register the resolver with your DeliveryClient
 
 Once a custom resolver is implemented and registered to the client, resolution will automatically happen when a ContentItem or ContentItemListing is built.
+
+Use [samples](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/tree/main/samples) and [example.py](https://github.com/kentico-michaelb/kontent-delivery-python-sdk/blob/main/example.py) as a reference.
 
 ### Resolving inline links
 By default, Kentico Kontent returns inline content item links with an empty "href" attribute and a "data-item-id" attribute containing the content item ID:
@@ -324,7 +328,7 @@ r = client.get_content_items_feed(
 )
 
 print(r.url)
-# prints: ~/items-feed?system.codename[eq]=on_roasts
+# prints: ~/items-feed?system.codename[eq]=test999
 ```
 
 ## Requesting content types
@@ -447,6 +451,8 @@ Using the DeliveryClient's __get_languages__ method will produce a **LanguageLis
 
 To access language values loop through the language listing and use dot notation: 
 ```python
+response = client.get_languages()
+
 for language in response.languages:
     print(language.name)
     # prints:
@@ -481,6 +487,8 @@ When you've obtained the URL for an asset, you can use the Kontent [Image Transf
 To use this, create an instance of **ImageBuilder** and pass the desired transformation methods into the bulder's __.transform()__ method. Example:
 
 ```python
+from kontent_delivery.builders.image_builder import ImageBuilder
+
 # Get content item
 response = client.get_content_item("coffee_processing_techniques")
 
