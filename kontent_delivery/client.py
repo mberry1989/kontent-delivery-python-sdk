@@ -29,7 +29,6 @@ class DeliveryClient:
         if response.ok:
             content_item_listing = self.content_builder.build_content_item_listing(self, response)
             return content_item_listing
-        return response.status_code
 
     def get_content_item(self, codename: str):
         url = self.url_builder.build_url(self, f"/items/{codename}")
@@ -84,4 +83,3 @@ class DeliveryClient:
         if response.ok:
             content_items_feed = self.content_builder.build_items_feed(self, response, url)
             return content_items_feed
-        return response.status_code

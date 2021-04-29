@@ -3,13 +3,13 @@ from setuptools import setup, find_packages
 DESCRIPTION = "Kentico Kontent Delivery API SDK"
 LONGDESCRIPTION = """
 The Delivery Python SDK can be used in Python projects to retrieve content from the Kentico Kontent headless CMS. This is a community project and not an official Kentico SDK. 
-If you find a bug in the SDK or have a feature request, please submit a GitHub issue.
+If you find a bug in the SDK or have a feature request, please submit a GitHub issue at https://github.com/kentico-michaelb/kontent-delivery-python-sdk.
 """
 
 
 setup(
         name="kontent_delivery",
-        version="0.1.1",
+        version="0.1.2",
         author="Michael Berry",
         description=DESCRIPTION,
         long_description=LONGDESCRIPTION,
