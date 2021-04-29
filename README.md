@@ -13,6 +13,7 @@ If you find a bug in the SDK or have a feature request, please submit a GitHub i
   - [Retrying requests](#Retrying-requests)
 - [Requesting items](#Requesting-items)
   - [Getting a single item](#Getting-a-single-item)
+  - [Getting linked items](#Getting-linked-items)
   - [Getting multiple items](#Getting-multiple-items)
   - [Filtering content](#Filtering-content)
 - [Rich Text Resolution](#Rich-text-resolution)
@@ -118,6 +119,22 @@ print(response.elements.title.value)
 Using this method will return a **ContentItem**.  To access elements and their values use dot notation in the format: 
 ```response.elements.element_name.value``` 
 
+### Getting linked items
+Getting items used in a linked items element on a content item can be done by using the __get_linked_items()__ method and passing in the linked items element's codename:
+```python
+response = client.get_content_item("coffee_processing_techniques")
+
+linked_items = response.get_linked_items("related_articles")
+
+for item in linked_items:
+    print(f"name: {item.name}")
+    # prints:
+    # On Roasts
+    # About Us
+    # etc.
+
+```
+Using this method will return a list of **ContentItem**s.
 
 #### **ContentItem attributes:**
 | Attribute | Description |
