@@ -15,6 +15,7 @@ setup(
         long_description=LONGDESCRIPTION,
         license="MIT",
         packages=find_packages(exclude=["tests", "samples"]),
+        url="https://github.com/kentico-michaelb/kontent-delivery-python-sdk",
         install_requires=[
             "astroid>=2.5.1",
             "atomicwrites>=1.4.0",
