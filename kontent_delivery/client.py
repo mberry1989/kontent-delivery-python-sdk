@@ -34,7 +34,8 @@ class DeliveryClient:
         url = self.url_builder.build_url(self, f"/items/{codename}")
         response = self.request_manager.get_request(self, url)
         if response.ok:
-            content_item = self.content_builder.build_content_item(self, response)
+            json = response.json()
+            content_item = self.content_builder.build_content_item(self, json, response)
             return content_item
 
     def get_content_types(self):
