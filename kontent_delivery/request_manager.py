@@ -31,7 +31,6 @@ class RequestManager:
         adapter = HTTPAdapter(max_retries=retry_strategy)
         session = requests.Session()
         session.mount("https://", adapter)
-        session.mount("https://", adapter)
 
         response = session.get(url, timeout=timeout_option, headers=headers)
 

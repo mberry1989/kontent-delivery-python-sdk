@@ -10,8 +10,7 @@ class ContentBuilder:
     def __init__(self):
         pass
 
-    def build_content_item(self, delivery_client, response, item=None):
-        json = response.json()
+    def build_content_item(self, delivery_client, json, response, item=None):
         if item is None:
             item = json["item"]
         if json["modular_content"]:
@@ -29,7 +28,7 @@ class ContentBuilder:
 
     def build_content_item_listing(self, delivery_client, response):
         json = response.json()
-        items = [self.build_content_item(delivery_client, response, item) for item in json["items"]]
+        items = [self.build_content_item(delivery_client, json, response, item) for item in json["items"]]
         pagination = None
         if "pagination" in json.keys():
             pagination = json["pagination"]
