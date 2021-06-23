@@ -9,7 +9,7 @@ If you find a bug in the SDK or have a feature request, please submit a GitHub i
 
 setup(
         name="kontent_delivery",
-        version="0.1.2",
+        version="0.1.3",
         author="Michael Berry",
         description=DESCRIPTION,
         long_description=LONGDESCRIPTION,
